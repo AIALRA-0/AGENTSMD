@@ -126,24 +126,39 @@ python3 AGENTSMD/scripts/install_ci_workflow.py --repo-root .
 
 ### Starter Prompt Template (First Task)
 
-Use this prompt when an agent starts from zero memory:
+Use this prompt when an agent starts from zero memory and needs to
+survey the full project before AGENTSMD onboarding:
 
 ```text
 You are working in this repository. AGENTSMD is the only rule source.
-Before any action:
-1) Read AGENTSMD/AGENTS.md.
-2) Identify task mode (update/log/entry).
-3) Read target *_INDEX.md first, then target entry file.
-4) Check REGISTRY protected paths before writing.
-5) After changes run:
-   bash AGENTSMD/scripts/md_sync.sh --scope <DEPT>
-6) If scope is unclear run:
-   bash AGENTSMD/scripts/md_sync.sh
+Phase A - Full project reconnaissance (read-only):
+1) Read AGENTSMD/AGENTS.md and AGENTSMD/MD_SYNTAX_CHECK.md.
+2) Survey repository structure, runtime stack, key scripts, CI config,
+   dependencies, test setup, API integration points, and deployment docs.
+3) Build a concise project map: business goals, architecture modules,
+   risk hotspots, and likely ownership boundaries.
+4) Map findings into AGENTSMD departments:
+   - RESEARCHMD: market/context/competitor facts
+   - SPECMD: goals/PRD/spec constraints
+   - RESOURCEMD: URLs/paths only
+   - KNOWLEDGEMD: reusable technical explanations
+   - TOOLMD/ENVIRONMENTMD/APIMD: operational facts
+
+Phase B - Natural AGENTSMD onboarding (minimal writes):
+5) Check REGISTRY protected paths before any write.
+6) Create or update only necessary baseline entries (no over-writing,
+   no department flooding).
+7) Record onboarding changes in CHANGEMD.
+8) Run validation:
+   - bash AGENTSMD/scripts/md_sync.sh --scope <DEPT> (if scoped)
+   - bash AGENTSMD/scripts/md_sync.sh (full if cross-department)
 
 Task:
 <describe task here>
 
 Output format:
+- project reconnaissance summary
+- AGENTSMD onboarding plan (department-by-department)
 - files read
 - files changed
 - validation output summary
@@ -342,24 +357,37 @@ python3 AGENTSMD/scripts/install_ci_workflow.py --repo-root .
 
 ### 初始提示词模板（第一条任务）
 
-当 Agent 没有记忆时，可以先用这段提示词：
+当 Agent 没有记忆，并且需要先完整感知项目再接入 AGENTSMD 时，
+先用这段提示词：
 
 ```text
 你在当前仓库工作，AGENTSMD 是唯一规则源。
-执行任何操作前必须：
-1）读取 AGENTSMD/AGENTS.md
-2）识别任务模式（update/log/entry）
-3）先读目标 *_INDEX.md，再读目标条目
-4）写入前检查 REGISTRY 受保护路径
-5）修改后执行：
-   bash AGENTSMD/scripts/md_sync.sh --scope <DEPT>
-6）若范围不明确，执行：
-   bash AGENTSMD/scripts/md_sync.sh
+阶段 A - 全项目调查感知（只读）：
+1）读取 AGENTSMD/AGENTS.md 与 AGENTSMD/MD_SYNTAX_CHECK.md
+2）调查仓库结构、技术栈、关键脚本、CI、依赖、测试体系、
+   API 接入点与部署信息
+3）输出项目全景：业务目标、架构模块、风险热点、关键边界
+4）把调查结果映射到 AGENTSMD 部门：
+   - RESEARCHMD：市场/背景/竞品事实
+   - SPECMD：目标/PRD/规格约束
+   - RESOURCEMD：仅记录 URL/路径
+   - KNOWLEDGEMD：可复用技术解释
+   - TOOLMD/ENVIRONMENTMD/APIMD：运行与接口事实
+
+阶段 B - AGENTSMD 自然接入（最小写入）：
+5）写入前检查 REGISTRY 受保护路径
+6）仅新增或更新必要基线条目，禁止一次性泛滥写入
+7）把接入动作记录到 CHANGEMD
+8）执行校验：
+   - bash AGENTSMD/scripts/md_sync.sh --scope <DEPT>（单部门）
+   - bash AGENTSMD/scripts/md_sync.sh（跨部门全量）
 
 当前任务：
 <在这里描述任务>
 
 输出格式：
+- 项目调查摘要
+- AGENTSMD 接入计划（按部门）
 - 已读取文件
 - 已修改文件
 - 校验输出摘要
