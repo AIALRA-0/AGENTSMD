@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib
 import os
 from pathlib import Path
 
@@ -47,6 +48,37 @@ app.add_middleware(
 app.mount("/static", StaticFiles(directory=str(APP_ROOT / "static")), name="static")
 
 
+def _resolve_markdown_extensions() -> list[str]:
+    """Resolve markdown extensions in a cross-platform safe way.
+
+    Some environments fail to resolve short names like ``fenced_code``
+    directly and raise ``ModuleNotFoundError``. We proactively resolve
+    to fully-qualified modules and skip unavailable ones.
+    """
+    candidates = {
+        "fenced_code": ("markdown.extensions.fenced_code", "fenced_code"),
+        "tables": ("markdown.extensions.tables", "tables"),
+        "toc": ("markdown.extensions.toc", "toc"),
+        "nl2br": ("markdown.extensions.nl2br", "nl2br"),
+    }
+    resolved: list[str] = []
+    for _, names in candidates.items():
+        picked = None
+        for mod in names:
+            try:
+                importlib.import_module(mod)
+                picked = mod
+                break
+            except Exception:
+                continue
+        if picked:
+            resolved.append(picked)
+    return resolved
+
+
+MARKDOWN_EXTENSIONS = _resolve_markdown_extensions()
+
+
 def _display_path(path: Path) -> str:
     """Return a publish-safe relative path when possible."""
     try:
@@ -79,11 +111,15 @@ def api_get_file(path: str = Query(..., description="Path relative to AGENTSMD r
 
 @app.post("/api/render", response_model=RenderResponse)
 def api_render(req: RenderRequest) -> RenderResponse:
-    html = markdown.markdown(
-        req.content,
-        extensions=["fenced_code", "tables", "toc", "nl2br"],
-        output_format="html5",
-    )
+    # Never fail the render endpoint because of optional extension issues.
+    try:
+        html = markdown.markdown(
+            req.content,
+            extensions=MARKDOWN_EXTENSIONS,
+            output_format="html5",
+        )
+    except Exception:
+        html = markdown.markdown(req.content, output_format="html5")
     return RenderResponse(html=html)
 
 
