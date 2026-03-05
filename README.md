@@ -465,7 +465,7 @@ cd AGENTSMD_CN
 bash run_agentsmd_web.sh
 ```
 
-### Workflow Trace（如何工作）
+### Workflow Trace
 
 Workflow Trace 是把“工作流规则”变成“可校验执行证据”的核心机制：
 
