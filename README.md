@@ -189,12 +189,9 @@ python3 AGENTSMD_EN/scripts/install_ci_workflow.py \
 
 ### Screenshots Placeholders
 
-Replace these paths with real images when ready.
+Current Web Console screenshot:
 
-![Architecture Overview](./AGENTSMD_EN/docs/assets/architecture-overview.png)
-![Workflow Pipeline](./AGENTSMD_EN/docs/assets/workflow-pipeline.png)
 ![Web Console](./AGENTSMD_EN/docs/assets/web-console.png)
-![Cross-repo Validation](./AGENTSMD_EN/docs/assets/cross-repo-validation.png)
 
 ### FAQ
 
@@ -358,12 +355,9 @@ python3 AGENTSMD_EN/scripts/install_ci_workflow.py \
 
 ### 图片占位
 
-后续把占位图替换为真实截图即可。
+当前 Web 控制台截图：
 
-![架构总览](./AGENTSMD_EN/docs/assets/architecture-overview.png)
-![工作流管线](./AGENTSMD_EN/docs/assets/workflow-pipeline.png)
-![Web 控制台](./AGENTSMD_EN/docs/assets/web-console.png)
-![跨仓库校验](./AGENTSMD_EN/docs/assets/cross-repo-validation.png)
+![Web 控制台](./AGENTSMD_CN/docs/assets/web-console.png)
 
 ### 常见问题
 
