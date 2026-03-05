@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AGENTSMD Local visual console</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <h1>AGENTSMD console</h1>
+        <p>local file tree / Markdown Edit / One-click verification synchronization</p>
+      </div>
+      <div class="actions">
+        <button id="btn-refresh-tree">refresh tree</button>
+        <button id="btn-theme">switch night</button>
+        <button id="btn-render">Render preview</button>
+        <button id="btn-save" class="primary">save file</button>
+        <button id="btn-lint">Grammar check</button>
+        <button id="btn-index-sync">Index update</button>
+        <button id="btn-md-sync" class="primary">One-click synchronization</button>
+        <button id="btn-backup">Manual backup</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="panel tree-panel">
+        <div class="panel-head">
+          <h2>file tree</h2>
+          <div class="tree-tools">
+            <button id="btn-tree-expand-all" type="button">Expand</button>
+            <button id="btn-tree-collapse-all" type="button">fold</button>
+          </div>
+        </div>
+        <div id="tree-root" class="tree-root"></div>
+      </aside>
+
+      <section class="panel editor-panel">
+        <div class="panel-head">
+          <h2>Editor</h2>
+          <span id="current-file">No file selected</span>
+        </div>
+        <textarea id="editor" spellcheck="false" placeholder="Select left Markdown File later edit here"></textarea>
+      </section>
+
+      <section class="panel preview-panel">
+        <h2>Preview</h2>
+        <div id="preview" class="preview"></div>
+      </section>
+    </main>
+
+    <footer class="statusbar">
+      <span id="status">ready</span>
+    </footer>
+
+    <section class="panel output-panel">
+      <div class="panel-head">
+        <h2>execution log</h2>
+        <span id="last-command">-</span>
+      </div>
+      <pre id="output"></pre>
+    </section>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

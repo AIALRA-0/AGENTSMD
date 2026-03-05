@@ -1,0 +1,353 @@
+const treeRoot = document.getElementById("tree-root");
+const editor = document.getElementById("editor");
+const preview = document.getElementById("preview");
+const statusEl = document.getElementById("status");
+const outputEl = document.getElementById("output");
+const currentFileEl = document.getElementById("current-file");
+const lastCommandEl = document.getElementById("last-command");
+const themeBtn = document.getElementById("btn-theme");
+
+const EXPANDED_KEY = "agentsmd.tree.expanded.v1";
+const THEME_KEY = "agentsmd.theme.v1";
+
+let currentFile = "";
+let latestTree = null;
+let expandedMap = loadExpandedMap();
+let currentTheme = "light";
+
+function loadExpandedMap() {
+  try {
+    const raw = localStorage.getItem(EXPANDED_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveExpandedMap() {
+  localStorage.setItem(EXPANDED_KEY, JSON.stringify(expandedMap));
+}
+
+function detectSystemTheme() {
+  try {
+    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    }
+  } catch {
+    return "light";
+  }
+  return "light";
+}
+
+function loadTheme() {
+  try {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === "light" || saved === "dark") return saved;
+  } catch {
+    return detectSystemTheme();
+  }
+  return detectSystemTheme();
+}
+
+function updateThemeButton() {
+  if (!themeBtn) return;
+  themeBtn.textContent = currentTheme === "dark" ? "Switch daytime" : "switch night";
+}
+
+function applyTheme(theme) {
+  currentTheme = theme === "dark" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", currentTheme);
+  try {
+    localStorage.setItem(THEME_KEY, currentTheme);
+  } catch {
+    // ignore storage write failure
+  }
+  updateThemeButton();
+}
+
+function toggleTheme() {
+  applyTheme(currentTheme === "dark" ? "light" : "dark");
+}
+
+function setStatus(text, kind = "info") {
+  statusEl.textContent = text;
+  statusEl.style.color = kind === "error" ? "#b91c1c" : kind === "ok" ? "#15803d" : "#5f6f8d";
+}
+
+function setOutput(command, stdout, stderr) {
+  lastCommandEl.textContent = command || "-";
+  const parts = [];
+  if (stdout) parts.push(stdout);
+  if (stderr) parts.push(`\n[stderr]\n${stderr}`);
+  outputEl.textContent = parts.join("\n").trim() || "(No output)";
+}
+
+function inferScope(path) {
+  if (!path || !path.includes("/")) return null;
+  return path.split("/")[0] || null;
+}
+
+async function fetchJson(url, options = {}) {
+  const resp = await fetch(url, {
+    headers: { "Content-Type": "application/json" },
+    ...options,
+  });
+  if (!resp.ok) {
+    const txt = await resp.text();
+    throw new Error(txt || `HTTP ${resp.status}`);
+  }
+  return resp.json();
+}
+
+function setDirExpanded(path, expanded) {
+  if (!path || path === ".") return;
+  expandedMap[path] = !!expanded;
+  saveExpandedMap();
+}
+
+function getDirExpanded(path) {
+  return !!expandedMap[path];
+}
+
+function collectDirPaths(node, out = []) {
+  if (!node) return out;
+  if (node.type === "dir" && node.path !== ".") out.push(node.path);
+  for (const child of node.children || []) {
+    collectDirPaths(child, out);
+  }
+  return out;
+}
+
+function ensureAncestorsExpanded(path) {
+  if (!path) return;
+  const parts = path.split("/");
+  if (parts.length <= 1) return;
+  for (let i = 1; i < parts.length; i += 1) {
+    const p = parts.slice(0, i).join("/");
+    expandedMap[p] = true;
+  }
+  saveExpandedMap();
+}
+
+function renderNode(node, container, depth = 0) {
+  const li = document.createElement("li");
+  li.className = "tree-node";
+  li.style.setProperty("--depth", String(depth));
+
+  if (node.type === "dir") {
+    const row = document.createElement("div");
+    row.className = "tree-row tree-dir";
+
+    const toggle = document.createElement("button");
+    toggle.className = "tree-toggle";
+    toggle.type = "button";
+
+    const name = document.createElement("span");
+    name.className = "tree-name";
+    name.textContent = node.name;
+
+    const childrenList = document.createElement("ul");
+    childrenList.className = "tree-children";
+
+    const expanded = getDirExpanded(node.path);
+    toggle.textContent = expanded ? "▾" : "▸";
+    childrenList.hidden = !expanded;
+
+    const onToggle = () => {
+      const next = childrenList.hidden;
+      childrenList.hidden = !next;
+      toggle.textContent = next ? "▾" : "▸";
+      setDirExpanded(node.path, next);
+    };
+
+    toggle.onclick = onToggle;
+    name.onclick = onToggle;
+
+    row.appendChild(toggle);
+    row.appendChild(document.createTextNode("📁"));
+    row.appendChild(name);
+    li.appendChild(row);
+
+    for (const child of node.children || []) {
+      renderNode(child, childrenList, depth + 1);
+    }
+    li.appendChild(childrenList);
+  } else {
+    const row = document.createElement("div");
+    row.className = "tree-row tree-file";
+    row.dataset.path = node.path;
+
+    const spacer = document.createElement("span");
+    spacer.className = "tree-spacer";
+    spacer.textContent = " ";
+
+    const name = document.createElement("span");
+    name.className = "tree-name";
+    name.textContent = node.name;
+
+    row.appendChild(spacer);
+    row.appendChild(document.createTextNode("📄"));
+    row.appendChild(name);
+
+    row.onclick = () => openFile(node.path, row);
+    li.appendChild(row);
+  }
+
+  container.appendChild(li);
+}
+
+function markActiveFile() {
+  document.querySelectorAll(".tree-file.active").forEach((el) => el.classList.remove("active"));
+  if (!currentFile) return;
+  const current = document.querySelector(`.tree-file[data-path="${CSS.escape(currentFile)}"]`);
+  if (current) current.classList.add("active");
+}
+
+function renderTree(tree) {
+  treeRoot.innerHTML = "";
+  const list = document.createElement("ul");
+  list.className = "tree-list";
+  for (const child of tree.children || []) {
+    renderNode(child, list, 0);
+  }
+  treeRoot.appendChild(list);
+  markActiveFile();
+}
+
+async function loadTree() {
+  setStatus("Load file tree...");
+  try {
+    const tree = await fetchJson("/api/tree");
+    latestTree = tree;
+    renderTree(tree);
+    setStatus("File tree updated", "ok");
+  } catch (err) {
+    setStatus(`File tree loading failed: ${err.message}`, "error");
+  }
+}
+
+async function openFile(path, targetEl) {
+  try {
+    const data = await fetchJson(`/api/file?path=${encodeURIComponent(path)}`);
+    currentFile = path;
+    ensureAncestorsExpanded(path);
+    editor.value = data.content;
+    currentFileEl.textContent = path;
+    if (targetEl) {
+      document.querySelectorAll(".tree-file.active").forEach((el) => el.classList.remove("active"));
+      targetEl.classList.add("active");
+    } else {
+      markActiveFile();
+    }
+    await renderPreview();
+    setStatus(`Opened: ${path}`, "ok");
+  } catch (err) {
+    setStatus(`Open failed: ${err.message}`, "error");
+  }
+}
+
+async function renderPreview() {
+  try {
+    const data = await fetchJson("/api/render", {
+      method: "POST",
+      body: JSON.stringify({ content: editor.value }),
+    });
+    preview.innerHTML = data.html;
+    setStatus("Preview updated", "ok");
+  } catch (err) {
+    setStatus(`Rendering failed: ${err.message}`, "error");
+  }
+}
+
+async function saveFile() {
+  if (!currentFile) {
+    setStatus("Please select a file first", "error");
+    return;
+  }
+
+  try {
+    let resp = await fetchJson("/api/file/save", {
+      method: "POST",
+      body: JSON.stringify({ path: currentFile, content: editor.value, confirm_protected: false }),
+    });
+
+    if (!resp.saved && resp.requires_confirmation) {
+      const msg = `The file is protected，Confirm to save?？\n\nhit rule:\n${(resp.matched_rules || []).join("\n")}`;
+      const ok = window.confirm(msg);
+      if (!ok) {
+        setStatus("Protected file save canceled", "info");
+        return;
+      }
+      resp = await fetchJson("/api/file/save", {
+        method: "POST",
+        body: JSON.stringify({ path: currentFile, content: editor.value, confirm_protected: true }),
+      });
+    }
+
+    setStatus(`Saved successfully: ${currentFile} (${resp.bytes || 0} bytes)`, "ok");
+  } catch (err) {
+    setStatus(`Save failed: ${err.message}`, "error");
+  }
+}
+
+async function runAction(endpoint, scopeAware = false) {
+  try {
+    const payload = { scope: scopeAware ? inferScope(currentFile) : null };
+    const data = await fetchJson(endpoint, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
+    setOutput(data.command, data.stdout, data.stderr);
+    if (data.ok) {
+      setStatus("Executed successfully", "ok");
+      if (endpoint.includes("index-sync") || endpoint.includes("md-sync")) {
+        await loadTree();
+      }
+    } else {
+      setStatus(`Execution failed: ${data.returncode}`, "error");
+    }
+  } catch (err) {
+    setStatus(`Execution failed: ${err.message}`, "error");
+  }
+}
+
+async function manualBackup() {
+  try {
+    const data = await fetchJson("/api/backup/manual", { method: "POST", body: JSON.stringify({}) });
+    setOutput("manual-backup", `Backup completed\n${data.backup_path}\n${data.size_bytes} bytes`, "");
+    setStatus("Backup completed", "ok");
+  } catch (err) {
+    setStatus(`Backup failed: ${err.message}`, "error");
+  }
+}
+
+function expandAll() {
+  if (!latestTree) return;
+  for (const path of collectDirPaths(latestTree)) {
+    expandedMap[path] = true;
+  }
+  saveExpandedMap();
+  renderTree(latestTree);
+}
+
+function collapseAll() {
+  expandedMap = {};
+  saveExpandedMap();
+  if (latestTree) renderTree(latestTree);
+}
+
+document.getElementById("btn-refresh-tree").onclick = loadTree;
+document.getElementById("btn-render").onclick = renderPreview;
+document.getElementById("btn-save").onclick = saveFile;
+document.getElementById("btn-lint").onclick = () => runAction("/api/actions/lint", false);
+document.getElementById("btn-index-sync").onclick = () => runAction("/api/actions/index-sync", true);
+document.getElementById("btn-md-sync").onclick = () => runAction("/api/actions/md-sync", true);
+document.getElementById("btn-backup").onclick = manualBackup;
+document.getElementById("btn-tree-expand-all").onclick = expandAll;
+document.getElementById("btn-tree-collapse-all").onclick = collapseAll;
+if (themeBtn) themeBtn.onclick = toggleTheme;
+
+applyTheme(loadTheme());
+loadTree();
