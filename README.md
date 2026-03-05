@@ -322,7 +322,7 @@ flowchart TD
 - `placeholder`：占位并锁定，预留后续扩展。
   部门：`GOVERNANCEMD`、`CONTRIBMD`。
 
-#### 部门职责说明（扩展版）
+#### 部门职责说明
 
 - `CHANGEMD`：记录“已经真实落地”的改动事实、改动原因与改后观察，
   是执行链路可追溯的主线记录。
