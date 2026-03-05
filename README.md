@@ -53,13 +53,13 @@ flowchart TD
   U3 --> C
   U4 --> C
 
-  C --> D[Markdown syntax check]
-  D --> E[Rule consistency validation]
-  E --> F[Index synchronization]
-  F --> G[Post-sync validation]
+  C --> D[Markdown syntax check<br/>scripts/check_markdown.sh]
+  D --> E[Rule consistency validation<br/>scripts/md_validate.py]
+  E --> F[Index synchronization<br/>scripts/md_index_sync.py]
+  F --> G[Post-sync validation<br/>scripts/md_validate.py]
 
-  E --> H[Protected rule set<br/>REGISTRY + placeholder_lock]
-  H --> I[Protected-path write gate]
+  E --> H[Protected rule set<br/>REGISTRY_INDEX.md + REGISTRY_V*.md + placeholder_lock]
+  H --> I[Protected-path write gate<br/>save confirmation required]
 ```
 
 #### Three Core Files
@@ -201,13 +201,13 @@ flowchart TD
   U3 --> C
   U4 --> C
 
-  C --> D[Markdown 语法检查]
-  D --> E[规则一致性校验]
-  E --> F[索引同步]
-  F --> G[同步后复检]
+  C --> D[Markdown 语法检查<br/>scripts/check_markdown.sh]
+  D --> E[规则一致性校验<br/>scripts/md_validate.py]
+  E --> F[索引同步<br/>scripts/md_index_sync.py]
+  F --> G[同步后复检<br/>scripts/md_validate.py]
 
-  E --> H[受保护规则集<br/>REGISTRY + placeholder_lock]
-  H --> I[受保护路径写入闸门]
+  E --> H[受保护规则集<br/>REGISTRY_INDEX.md + REGISTRY_V*.md + placeholder_lock]
+  H --> I[受保护路径写入闸门<br/>保存需确认]
 ```
 
 #### 三个核心文件
