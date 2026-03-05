@@ -1,0 +1,108 @@
+name: AGENTSMD CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      count: ${{ steps.discover.outputs.count }}
+      matrix: ${{ steps.discover.outputs.matrix }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Discover AGENTSMD targets
+        id: discover
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          root = Path('.').resolve()
+          required = [
+              Path('scripts/check_markdown.sh'),
+              Path('scripts/md_validate.py'),
+              Path('scripts/md_index_sync.py'),
+              Path('MD_SYNTAX_CHECK.md'),
+          ]
+
+          def is_target(dir_path: Path) -> bool:
+              return dir_path.is_dir() and all((dir_path / p).exists() for p in required)
+
+          targets = set()
+
+          # include current repo root when applicable
+          if root.name.startswith('AGENTSMD') and is_target(root):
+              targets.add('.')
+
+          # include nested AGENTSMD* directories
+          for p in root.rglob('*'):
+              if p.is_dir() and p.name.startswith('AGENTSMD') and is_target(p):
+                  targets.add(p.relative_to(root).as_posix())
+
+          target_list = sorted(targets)
+          matrix = {'include': [{'path': t} for t in target_list]}
+
+          print('Discovered targets:', target_list)
+          gh_out = Path(os.environ['GITHUB_OUTPUT'])
+          with gh_out.open('a', encoding='utf-8') as f:
+              f.write(f"count={len(target_list)}\n")
+              f.write('matrix<<JSON\n')
+              f.write(json.dumps(matrix))
+              f.write('\nJSON\n')
+          PY
+
+  validate:
+    needs: discover
+    if: needs.discover.outputs.count != '0'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover.outputs.matrix) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Markdown lint
+        working-directory: ${{ matrix.path }}
+        run: bash scripts/check_markdown.sh
+
+      - name: Validate rules
+        working-directory: ${{ matrix.path }}
+        run: python3 scripts/md_validate.py
+
+      - name: Sync index
+        working-directory: ${{ matrix.path }}
+        run: python3 scripts/md_index_sync.py
+
+      - name: Validate after sync
+        working-directory: ${{ matrix.path }}
+        run: python3 scripts/md_validate.py
+
+      - name: Ensure no unsynced changes
+        run: git diff --exit-code
+
+  no-target:
+    needs: discover
+    if: needs.discover.outputs.count == '0'
+    runs-on: ubuntu-latest
+    steps:
+      - name: No AGENTSMD target found
+        run: echo "No AGENTSMD* directory with required scripts was found. Skip validation."
