@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -257,6 +258,34 @@ def validate_department(name: str, cfg: dict, global_cfg: dict):
     return errs
 
 
+def run_index_sync(scope: str) -> tuple[int, str]:
+    cmd = [sys.executable, str(ROOT / "scripts" / "md_index_sync.py"), "--scope", scope]
+    p = subprocess.run(cmd, capture_output=True, text=True)
+    output = (p.stdout or "") + ("\n" + p.stderr if p.stderr else "")
+    return p.returncode, output.strip()
+
+
+def validate_once(rules: dict, scope: str, skip_placeholder_lock: bool) -> list[str]:
+    depts = rules.get("departments", {})
+    active_depts = set(rules.get("active_departments", []))
+    errs: list[str] = []
+
+    errs.extend(validate_placeholder_lock(rules, skip_placeholder_lock))
+
+    if scope:
+        if scope in active_depts:
+            errs.extend(validate_department(scope, depts.get(scope, {}), rules.get("global", {})))
+        elif scope in set(rules.get("placeholder_departments", [])):
+            # Placeholder scope only runs lock checks.
+            pass
+        else:
+            errs.append(f"unknown scope: {scope}")
+    else:
+        for name in sorted(active_depts):
+            errs.extend(validate_department(name, depts.get(name, {}), rules.get("global", {})))
+    return errs
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--scope", default="", help="department name, e.g. CHANGEMD")
@@ -265,26 +294,39 @@ def main():
         action="store_true",
         help="skip strict sha256 checks for placeholder directories",
     )
+    parser.add_argument(
+        "--auto-fix-index",
+        action="store_true",
+        help="auto-run md_index_sync for departments with index columns mismatch, then re-validate",
+    )
     args = parser.parse_args()
 
     rules = load_rules()
-    depts = rules.get("departments", {})
-    active_depts = set(rules.get("active_departments", []))
-    errs = []
+    errs = validate_once(rules, args.scope, args.skip_placeholder_lock)
 
-    errs.extend(validate_placeholder_lock(rules, args.skip_placeholder_lock))
-
-    if args.scope:
-        if args.scope in active_depts:
-            errs.extend(validate_department(args.scope, depts.get(args.scope, {}), rules.get("global", {})))
-        elif args.scope in set(rules.get("placeholder_departments", [])):
-            # Placeholder scope only runs lock checks.
-            pass
+    if args.auto_fix_index and errs:
+        mismatch_prefix = "index columns mismatch:"
+        fix_scopes: set[str] = set()
+        if args.scope:
+            if any(mismatch_prefix in e for e in errs):
+                fix_scopes.add(args.scope)
         else:
-            errs.append(f"unknown scope: {args.scope}")
-    else:
-        for name in sorted(active_depts):
-            errs.extend(validate_department(name, depts.get(name, {}), rules.get("global", {})))
+            for e in errs:
+                if mismatch_prefix in e and ":" in e:
+                    dept = e.split(":", 1)[0].strip()
+                    if dept:
+                        fix_scopes.add(dept)
+
+        for dept in sorted(fix_scopes):
+            code, output = run_index_sync(dept)
+            if code != 0:
+                errs.append(f"auto-fix index failed for {dept}: {output}")
+            else:
+                print(f"auto-fix index: {dept}")
+
+        if fix_scopes:
+            # Re-run once after auto-fix.
+            errs = validate_once(rules, args.scope, args.skip_placeholder_lock)
 
     if errs:
         print("MD VALIDATION FAILED")

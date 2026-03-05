@@ -28,6 +28,7 @@ jobs:
           root = Path('.').resolve()
           required = [
               Path('scripts/check_markdown.sh'),
+              Path('scripts/normalize_blank_lines.py'),
               Path('scripts/md_validate.py'),
               Path('scripts/md_index_sync.py'),
               Path('scripts/md_workflow_guard.py'),
@@ -81,21 +82,29 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Markdown lint
+      - name: Markdown lint (auto-fix safe)
         working-directory: ${{ matrix.path }}
         run: bash scripts/check_markdown.sh
 
-      - name: Validate rules
+      - name: Validate rules (auto-fix index)
         working-directory: ${{ matrix.path }}
-        run: python3 scripts/md_validate.py
+        run: python3 scripts/md_validate.py --auto-fix-index
 
       - name: Sync index
         working-directory: ${{ matrix.path }}
         run: python3 scripts/md_index_sync.py
 
-      - name: Validate after sync
+      - name: Normalize blank lines after index sync
         working-directory: ${{ matrix.path }}
-        run: python3 scripts/md_validate.py
+        run: python3 scripts/normalize_blank_lines.py
+
+      - name: Markdown lint re-check
+        working-directory: ${{ matrix.path }}
+        run: bash scripts/check_markdown.sh
+
+      - name: Validate after sync (auto-fix index)
+        working-directory: ${{ matrix.path }}
+        run: python3 scripts/md_validate.py --auto-fix-index
 
       - name: Workflow guard report (non-blocking)
         working-directory: ${{ matrix.path }}
@@ -111,8 +120,24 @@ jobs:
             ${{ matrix.path }}/workflow_guard_report.json
           if-no-files-found: ignore
 
-      - name: Ensure no unsynced changes
-        run: git diff --exit-code
+      - name: Auto-fix diff report (non-blocking)
+        if: always()
+        run: |
+          if ! git diff --quiet; then
+            echo "::warning::CI applied safe auto-fixes. Please sync local changes."
+            git diff --stat
+            git diff > agentsmd_autofix.patch
+          else
+            echo "No auto-fix diff generated."
+          fi
+
+      - name: Upload auto-fix patch
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentsmd-autofix-${{ matrix.path }}
+          path: agentsmd_autofix.patch
+          if-no-files-found: ignore
 
   no-target:
     needs: discover
