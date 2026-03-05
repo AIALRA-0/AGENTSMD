@@ -217,12 +217,25 @@ cd AGENTSMD_CN
 bash run_agentsmd_web.sh
 ```
 
-### Workflow Trace Example
+### Workflow Trace (How It Works)
 
-- CN sample:
-  [`AGENTSMD_CN/RUNMD/RUN_INFO_WORKFLOW_CODING_IMPLEMENTATION_DEMO_2026_03_05_1245.md`](./AGENTSMD_CN/RUNMD/RUN_INFO_WORKFLOW_CODING_IMPLEMENTATION_DEMO_2026_03_05_1245.md)
-- EN sample:
-  [`AGENTSMD_EN/RUNMD/RUN_INFO_WORKFLOW_CODING_IMPLEMENTATION_DEMO_2026_03_05_1245.md`](./AGENTSMD_EN/RUNMD/RUN_INFO_WORKFLOW_CODING_IMPLEMENTATION_DEMO_2026_03_05_1245.md)
+Workflow Trace is the execution protocol that turns workflow rules
+into verifiable evidence:
+
+1. Select one `workflow_id` from `MD_SYNTAX_CHECK.md`
+   (`workflow_enforcement.catalog`) before doing work.
+2. Create one `RUN_INFO_WORKFLOW_*` record in `RUNMD` for this task.
+3. Fill `## Workflow Trace` JSON with:
+   `workflow_id`, `task_id`, `reason`, and full `steps[]`.
+4. For each step, report:
+   `step_id`, `department`, `status`, `evidence`, `note`.
+5. Status rules:
+   `must_read` must be `READ_ONLY` or `CHANGED`;
+   `must_write` must be `CHANGED` with real department diff;
+   `optional_write` may use `SKIPPED_JUSTIFIED` only when allowed and with a reason.
+6. Enforcement:
+   local `md_sync.sh` runs strict guard (blocks on missing steps);
+   CI runs report-only guard (warns and guides completion).
 
 ### CI and Downstream Usage
 
@@ -452,12 +465,24 @@ cd AGENTSMD_CN
 bash run_agentsmd_web.sh
 ```
 
-### Workflow Trace 示例
+### Workflow Trace（如何工作）
 
-- 中文示例：
-  [`AGENTSMD_CN/RUNMD/RUN_INFO_WORKFLOW_CODING_IMPLEMENTATION_DEMO_2026_03_05_1245.md`](./AGENTSMD_CN/RUNMD/RUN_INFO_WORKFLOW_CODING_IMPLEMENTATION_DEMO_2026_03_05_1245.md)
-- 英文示例：
-  [`AGENTSMD_EN/RUNMD/RUN_INFO_WORKFLOW_CODING_IMPLEMENTATION_DEMO_2026_03_05_1245.md`](./AGENTSMD_EN/RUNMD/RUN_INFO_WORKFLOW_CODING_IMPLEMENTATION_DEMO_2026_03_05_1245.md)
+Workflow Trace 是把“工作流规则”变成“可校验执行证据”的核心机制：
+
+1. 开始任务前，先从 `MD_SYNTAX_CHECK.md` 的
+   `workflow_enforcement.catalog` 选择一个 `workflow_id`。
+2. 每个任务必须在 `RUNMD` 新增一条 `RUN_INFO_WORKFLOW_*` 记录。
+3. 在 `## Workflow Trace` 中填写 JSON，至少包含：
+   `workflow_id`、`task_id`、`reason`、`steps[]`。
+4. 每个步骤必须写清：
+   `step_id`、`department`、`status`、`evidence`、`note`。
+5. 状态判定规则：
+   `must_read` 只能是 `READ_ONLY/CHANGED`；
+   `must_write` 必须是 `CHANGED` 且对应部门有真实改动；
+   `optional_write` 仅在允许时可用 `SKIPPED_JUSTIFIED`，且必须写理由。
+6. 执行策略：
+   本地 `md_sync.sh` 走严格拦截（缺步骤直接失败）；
+   CI 走反馈模式（给 warning 和补全建议，不直接阻断）。
 
 ### CI 与下放接入
 
