@@ -41,10 +41,17 @@ flowchart TD
   B --> B1[update<br/>Version stream]
   B --> B2[log<br/>Event stream]
   B --> B3[entry<br/>Entry stream]
+  B --> BP[placeholder<br/>Locked modules]
 
-  B1 --> C[Index-first Read/Write]
-  B2 --> C
-  B3 --> C
+  B1 --> U1[CHANGEMD<br/>DECISIONMD<br/>RESEARCHMD<br/>SPECMD<br/>REGISTRYMD]
+  B2 --> U2[RUNMD<br/>ERRORMD<br/>SECURITYMD]
+  B3 --> U3[KNOWLEDGEMD<br/>RESOURCEMD<br/>ENVIRONMENTMD<br/>STYLEMD<br/>TESTMD<br/>APIMD<br/>TOOLMD]
+  BP --> U4[GOVERNANCEMD<br/>CONTRIBMD]
+
+  U1 --> C[Index-first Read/Write]
+  U2 --> C
+  U3 --> C
+  U4 --> C
 
   C --> D[check_markdown.sh]
   D --> E[md_validate.py]
@@ -64,8 +71,15 @@ flowchart TD
 #### Three Data Modes
 
 - `update`: version stream, keep history, read latest first.
+  Departments: `CHANGEMD`, `DECISIONMD`, `RESEARCHMD`,
+  `SPECMD`, `REGISTRYMD`.
 - `log`: event stream, each incident is independent.
-- `entry`: key-based records, update existing key records.
+  Departments: `RUNMD`, `ERRORMD`, `SECURITYMD`.
+- `entry`: entry stream, update existing key records.
+  Departments: `KNOWLEDGEMD`, `RESOURCEMD`, `ENVIRONMENTMD`,
+  `STYLEMD`, `TESTMD`, `APIMD`, `TOOLMD`.
+- `placeholder`: locked modules for future extension.
+  Departments: `GOVERNANCEMD`, `CONTRIBMD`.
 
 ### Department Map (One Line Each)
 
@@ -175,10 +189,17 @@ flowchart TD
   B --> B1[update<br/>版本流]
   B --> B2[log<br/>事件流]
   B --> B3[entry<br/>条目流]
+  B --> BP[placeholder<br/>占位锁定模块]
 
-  B1 --> C[先索引后读写]
-  B2 --> C
-  B3 --> C
+  B1 --> U1[CHANGEMD<br/>DECISIONMD<br/>RESEARCHMD<br/>SPECMD<br/>REGISTRYMD]
+  B2 --> U2[RUNMD<br/>ERRORMD<br/>SECURITYMD]
+  B3 --> U3[KNOWLEDGEMD<br/>RESOURCEMD<br/>ENVIRONMENTMD<br/>STYLEMD<br/>TESTMD<br/>APIMD<br/>TOOLMD]
+  BP --> U4[GOVERNANCEMD<br/>CONTRIBMD]
+
+  U1 --> C[先索引后读写]
+  U2 --> C
+  U3 --> C
+  U4 --> C
 
   C --> D[check_markdown.sh]
   D --> E[md_validate.py]
@@ -198,8 +219,15 @@ flowchart TD
 #### 三种数据模式
 
 - `update`：版本流，保留历史，默认先读最新。
+  部门：`CHANGEMD`、`DECISIONMD`、`RESEARCHMD`、
+  `SPECMD`、`REGISTRYMD`。
 - `log`：事件流，每条事件独立，不覆盖历史。
-- `entry`：按 Key 维护条目，已有 Key 直接更新。
+  部门：`RUNMD`、`ERRORMD`、`SECURITYMD`。
+- `entry`：条目流，已有 Key 直接更新。
+  部门：`KNOWLEDGEMD`、`RESOURCEMD`、`ENVIRONMENTMD`、
+  `STYLEMD`、`TESTMD`、`APIMD`、`TOOLMD`。
+- `placeholder`：占位并锁定，预留后续扩展。
+  部门：`GOVERNANCEMD`、`CONTRIBMD`。
 
 ### 部门一句话说明
 
