@@ -61,7 +61,7 @@
 2. 读取目标工作流，并按模式选择读取目标部门
 3. 按照工作流执行信息获取，执行和执行后观察，并按需更新条目
 4. 如果需要更新写入，写入前读取 `REGISTRYMD` 最新条目检查保护路径，若命中受保护路径，停止写入并请求外部确认。
-5. 写入完成后必须执行：`scripts/md_sync.sh`。仅改单独部门时使用：`scripts/md_sync.sh --scope <DEPT>`。
+5. 同一任务内可连续完成多个部门修改；全部改完后仅执行一次全量 `scripts/md_sync.sh`。
 6. 若自动修复失败，输出失败清单并提醒外部用户。
 
 ## 自动化入口
@@ -70,7 +70,7 @@
 * 规则校验：`scripts/md_validate.py [--scope <DEPT>]`
 * 索引同步：`scripts/md_index_sync.py [--scope <DEPT>]`
 * 工作流守卫：`scripts/md_workflow_guard.py [--scope <DEPT>] [--strict|--report-only]`
-* 一键闭环：`scripts/md_sync.sh [--scope <DEPT>]`
+* 一键闭环：`scripts/md_sync.sh`（默认任务收尾只跑一次全量）
 * 规则配置：`MD_SYNTAX_CHECK.md`（新增部门或规则变更只改此文件）
 
 ## 工作流模板
@@ -239,7 +239,7 @@
 * `Source` 必须符合统一格式：`SRC-序号 | 类型(WEB/PDF/REPORT/REPO/API/LOCAL_FILE/LOG/INTERVIEW/OTHER) | 路径或URL | 证据用途`。
 * `Token Policy` 只记录 token 管理规则与来源位置，禁止写入真实明文 token。
 * `Quota & Maintenance` 必须记录用量口径、限流/配额、维护责任人或维护流程。
-* 写入后必须更新 `API_INDEX.md`，并执行 `scripts/md_sync.sh --scope APIMD`。
+* 写入后必须更新 `API_INDEX.md`。
 * API 变化应联动 `SPECMD`、`TESTMD`、`TOOLMD`。
 
 ### 禁止行为
@@ -352,7 +352,7 @@
 * 当环境发生变化且该 `Key` 已存在时：更新该 `Key` 条目并将文件名更新为最新时间戳。
 * 条目必须包含：`Metadata`、`Summary`、`Thought`、`Action`、`Observation`。
 * `Summary` 必须单行，明确“环境变更点 + 影响范围”。
-* 写入后必须同步更新 `ENVIRONMENT_INDEX.md`，并执行 `scripts/md_sync.sh --scope ENVIRONMENTMD`。
+* 写入后必须同步更新 `ENVIRONMENT_INDEX.md`。
 
 ### 禁止行为
 
@@ -388,7 +388,7 @@
 * 错误记录必须包含：`Metadata`、`Summary`、`Thought`、`Action`、`Observation`、`Root Cause`、`Fix`、`Prevention`。
 * `Metadata` 必须明确写 `级别`，并与文件名中的 `<LEVEL>` 保持一致。
 * 若产生代码或配置修改，必须联动 `CHANGEMD`。
-* 新增记录后必须更新 `ERROR_INDEX.md`，并执行 `scripts/md_sync.sh --scope ERRORMD`。
+* 新增记录后必须更新 `ERROR_INDEX.md`。
 
 ### 禁止行为
 
@@ -487,7 +487,7 @@
 * 条目必须包含：`Metadata`、`Summary`、`Source`、`Key Details`、`Thought`、`Action`、`Observation`。
 * `Source` 必须可追溯：本地绝对路径或 URL，且必须符合统一格式；`Key Details` 必须包含“旧结论/新结论/影响范围/优先级/证据”。
 * 若研究结论影响策略或执行路径，必须联动 `DECISIONMD`、`CHANGEMD` 或 `SPECMD`。
-* 新增版本后必须更新 `RESEARCH_INDEX.md`，并执行 `scripts/md_sync.sh --scope RESEARCHMD`。
+* 新增版本后必须更新 `RESEARCH_INDEX.md`。
 
 ### 禁止行为
 
@@ -521,7 +521,7 @@
 * 同资源 `Key` 已存在时，更新该 `Key` 条目并刷新文件名时间戳。
 * 同资源 `Key` 不存在时，新增条目。
 * 条目必须包含：`Metadata`、`Summary`、`Resource Path`、`Thought`、`Action`、`Observation`。
-* 写入后必须更新 `RESOURCE_INDEX.md`，并执行 `scripts/md_sync.sh --scope RESOURCEMD`。
+* 写入后必须更新 `RESOURCE_INDEX.md`。
 
 ### 禁止行为
 
@@ -558,7 +558,7 @@
 * `Action` 必须尽量记录时间戳与关键命令，保证可回放与可复用。
 * `Observation` 必须尽量量化（状态码、响应时延、连续通过次数、观察时段）。
 * 若运行处置导致代码或配置改动，必须联动 `CHANGEMD`。
-* 新增记录后必须更新 `RUN_INDEX.md`，并执行 `scripts/md_sync.sh --scope RUNMD`。
+* 新增记录后必须更新 `RUN_INDEX.md`。
 
 ### 禁止行为
 
@@ -659,7 +659,7 @@
 * 风格规则变更时，若 `Key` 已存在则更新该 `Key` 条目并刷新文件名时间戳；若 `Key` 不存在则新建条目。
 * 条目必须包含：`Metadata`、`Summary`、`Style Details`、`Thought`、`Action`、`Observation`。
 * `Style Details` 必须至少包含：`格式规则`、`注释规范`、`命名规则`。
-* 写入后必须同步更新 `STYLE_INDEX.md`，并执行 `scripts/md_sync.sh --scope STYLEMD`。
+* 写入后必须同步更新 `STYLE_INDEX.md`。
 
 ### 禁止行为
 
@@ -693,7 +693,7 @@
 * 同一 `Key` 更新时，更新该 `Key` 条目并刷新文件名时间戳；`Key` 不存在时新建条目。
 * 条目必须包含：`Metadata`、`Summary`、`Test Matrix`、`Special Requirements`、`Thought`、`Action`、`Observation`。
 * `Test Matrix` 必须明确：测试范围、测试类型、测试标准、测试工具、通过条件。
-* 新增或更新后必须同步更新 `TEST_INDEX.md`，并执行 `scripts/md_sync.sh --scope TESTMD`。
+* 新增或更新后必须同步更新 `TEST_INDEX.md`。
 
 ### 禁止行为
 
@@ -727,7 +727,7 @@
 * 同一 `Key` 更新时，更新该 `Key` 条目并刷新文件名时间戳；`Key` 不存在时新建条目。
 * 条目必须包含：`Metadata`、`Summary`、`Tool Details`、`Usage`、`Maintenance`、`Thought`、`Action`、`Observation`。
 * `Tool Details` 必须包含工具类型、本地绝对路径、启动命令、用途简介。
-* 写入后必须同步更新 `TOOL_INDEX.md`，并执行 `scripts/md_sync.sh --scope TOOLMD`。
+* 写入后必须同步更新 `TOOL_INDEX.md`。
 
 ### 禁止行为
 

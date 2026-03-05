@@ -61,7 +61,7 @@
 2. Read target workflow，and select read target department by mode
 3. Execute information acquisition according to workflow，Execution and postexecution observations，and update entries as needed
 4. If you need to update write，read before write `REGISTRYMD` Latest entry check protection path，If hit protected path，Stop writing and request external confirmation。
-5. Must be executed after writing is completed：`scripts/md_sync.sh`。Only used when changing to a separate department：`scripts/md_sync.sh --scope <DEPT>`。
+5. Multiple department edits can be completed within one task; run one full `scripts/md_sync.sh` only after all edits are finished。
 6. If automatic repair fails，Output failure list and alert external users。
 
 ## Automated entrance
@@ -70,7 +70,7 @@
 * Rule verification：`scripts/md_validate.py [--scope <DEPT>]`
 * Index synchronization：`scripts/md_index_sync.py [--scope <DEPT>]`
 * Workflow guard：`scripts/md_workflow_guard.py [--scope <DEPT>] [--strict|--report-only]`
-* Oneclick closed loop：`scripts/md_sync.sh [--scope <DEPT>]`
+* Oneclick closed loop：`scripts/md_sync.sh`（default: run once as final task closure）
 * Rule configuration：`MD_SYNTAX_CHECK.md`（If you add a new department or change rules only this file will be modified）
 
 ## Workflow template
@@ -239,7 +239,7 @@
 * `Source` Must conform to a unified format：`SRC-serial number | Type(WEB/PDF/REPORT/REPO/API/LOCAL_FILE/LOG/INTERVIEW/OTHER) | path orURL | Evidence purposes`。
 * `Token Policy` record only token Management rules and source locations，Disable writing of real plaintext token。
 * `Quota & Maintenance` Dosage diameter must be recorded、Current limiting/Quota、Maintenance owner or maintenance process。
-* Must be updated after writing `API_INDEX.md`，and execute `scripts/md_sync.sh --scope APIMD`。
+* Must be updated after writing `API_INDEX.md`。
 * API Changes should be linked `SPECMD`、`TESTMD`、`TOOLMD`。
 
 ### Prohibited behavior
@@ -352,7 +352,7 @@
 * When the environment changes and the `Key` When already exists：update this `Key` entry and update the filename to the latest timestamp。
 * Entry must contain：`Metadata`、`Summary`、`Thought`、`Action`、`Observation`。
 * `Summary` Must be single line，clear“environment change point + scope of influence”。
-* Must be updated synchronously after writing `ENVIRONMENT_INDEX.md`，and execute `scripts/md_sync.sh --scope ENVIRONMENTMD`。
+* Must be updated synchronously after writing `ENVIRONMENT_INDEX.md`。
 
 ### Prohibited behavior
 
@@ -388,7 +388,7 @@
 * The error log must contain：`Metadata`、`Summary`、`Thought`、`Action`、`Observation`、`Root Cause`、`Fix`、`Prevention`。
 * `Metadata` must be clearly written `Level`，And with the file name `<LEVEL>` Be consistent。
 * If code or configuration modifications are made，Must be linked `CHANGEMD`。
-* Must be updated after adding new records `ERROR_INDEX.md`，and execute `scripts/md_sync.sh --scope ERRORMD`。
+* Must be updated after adding new records `ERROR_INDEX.md`。
 
 ### Prohibited behavior
 
@@ -487,7 +487,7 @@
 * Entry must contain：`Metadata`、`Summary`、`Source`、`Key Details`、`Thought`、`Action`、`Observation`。
 * `Source` Must be traceable：local absolute path or URL，and must conform to a unified format；`Key Details` must contain“old conclusion/new conclusion/scope of influence/priority/evidence”。
 * If the research conclusion affects strategy or execution path，Must be linked `DECISIONMD`、`CHANGEMD` or `SPECMD`。
-* Must be updated after adding a new version `RESEARCH_INDEX.md`，and execute `scripts/md_sync.sh --scope RESEARCHMD`。
+* Must be updated after adding a new version `RESEARCH_INDEX.md`。
 
 ### Prohibited behavior
 
@@ -521,7 +521,7 @@
 * Same resources `Key` When already exists，update this `Key` entries and refresh filename timestamps。
 * Same resources `Key` When it does not exist，New entry。
 * Entry must contain：`Metadata`、`Summary`、`Resource Path`、`Thought`、`Action`、`Observation`。
-* Must be updated after writing `RESOURCE_INDEX.md`，and execute `scripts/md_sync.sh --scope RESOURCEMD`。
+* Must be updated after writing `RESOURCE_INDEX.md`。
 
 ### Prohibited behavior
 
@@ -558,7 +558,7 @@
 * `Action` Time stamps and key commands must be recorded as much as possible，Guaranteed playback and reusability。
 * `Observation` Must be quantified as much as possible（status code、response delay、Number of consecutive passes、observation period）。
 * If running the disposition results in code or configuration changes，Must be linked `CHANGEMD`。
-* Must be updated after adding new records `RUN_INDEX.md`，and execute `scripts/md_sync.sh --scope RUNMD`。
+* Must be updated after adding new records `RUN_INDEX.md`。
 
 ### Prohibited behavior
 
@@ -659,7 +659,7 @@
 * When style rules change，If `Key` If it already exists update it `Key` entries and refresh filename timestamps；If `Key` Create a new entry if it does not exist。
 * Entry must contain：`Metadata`、`Summary`、`Style Details`、`Thought`、`Action`、`Observation`。
 * `Style Details` Must contain at least：`Format rules`、`Annotation specifications`、`Naming rules`。
-* Must be updated synchronously after writing `STYLE_INDEX.md`，and execute `scripts/md_sync.sh --scope STYLEMD`。
+* Must be updated synchronously after writing `STYLE_INDEX.md`。
 
 ### Prohibited behavior
 
@@ -693,7 +693,7 @@
 * same `Key` When updating，update this `Key` entries and refresh filename timestamps；`Key` Create a new entry if it does not exist。
 * Entry must contain：`Metadata`、`Summary`、`Test Matrix`、`Special Requirements`、`Thought`、`Action`、`Observation`。
 * `Test Matrix` Must be clear：Test range、Test type、Test standards、testing tools、pass conditions。
-* New additions or updates must be updated simultaneously `TEST_INDEX.md`，and execute `scripts/md_sync.sh --scope TESTMD`。
+* New additions or updates must be updated simultaneously `TEST_INDEX.md`。
 
 ### Prohibited behavior
 
@@ -727,7 +727,7 @@
 * same `Key` When updating，update this `Key` entries and refresh filename timestamps；`Key` Create a new entry if it does not exist。
 * Entry must contain：`Metadata`、`Summary`、`Tool Details`、`Usage`、`Maintenance`、`Thought`、`Action`、`Observation`。
 * `Tool Details` Must contain tool type、local absolute path、Start command、Usage introduction。
-* Must be updated synchronously after writing `TOOL_INDEX.md`，and execute `scripts/md_sync.sh --scope TOOLMD`。
+* Must be updated synchronously after writing `TOOL_INDEX.md`。
 
 ### Prohibited behavior
 
