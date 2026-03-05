@@ -59,7 +59,7 @@ flowchart TD
   F --> G[Post-sync validation<br/>scripts/md_validate.py]
 
   E --> H[Protected rule set<br/>REGISTRY_INDEX.md + REGISTRY_V*.md + placeholder_lock]
-  H --> I[Protected-path write gate<br/>save confirmation required]
+  H --> I[Protected file change confirmation<br/>confirm before saving]
 ```
 
 #### Three Core Files
@@ -80,6 +80,43 @@ flowchart TD
   `STYLEMD`, `TESTMD`, `APIMD`, `TOOLMD`.
 - `placeholder`: locked modules for future extension.
   Departments: `GOVERNANCEMD`, `CONTRIBMD`.
+
+#### Department Role Map
+
+- `CHANGEMD`: records implemented change facts, why they were made,
+  and what was observed after execution.
+- `DECISIONMD`: records architecture-level and strategy-level decisions,
+  including decision rationale and rejected alternatives.
+- `RESEARCHMD`: records market movement, competitor shifts, and external
+  context changes that may affect planning.
+- `SPECMD`: records evolving goals, PRD boundaries, and technical
+  specification baselines for execution.
+- `REGISTRYMD`: records protected files/paths and defines where external
+  confirmation is mandatory before modification.
+- `RUNMD`: records runtime and operations incidents, responses, and
+  recovery outcomes for production stability.
+- `ERRORMD`: records engineering-side failures
+  (build/compile/dependency/test) with root cause and fix.
+- `SECURITYMD`: records confirmed attack events and response actions,
+  and links to related RUNMD/ERRORMD entries.
+- `KNOWLEDGEMD`: records reusable technical concepts, principles, paper
+  notes, and methods for fast agent understanding.
+- `RESOURCEMD`: records only resource pointers (URL or local absolute
+  path), not resource bodies.
+- `ENVIRONMENTMD`: records operating environment facts such as OS,
+  runtime, dependency, and baseline compatibility.
+- `STYLEMD`: records suffix-based writing/coding/comment rules to keep
+  output style consistent.
+- `TESTMD`: records testing standards, scope, toolchain, and acceptance
+  gates for quality control.
+- `APIMD`: records internal/external API endpoints, auth usage, quota,
+  and maintenance details.
+- `TOOLMD`: records local tool executables, usage commands, and
+  operational boundaries.
+- `GOVERNANCEMD`: reserved and locked placeholder for future
+  multi-agent governance policies.
+- `CONTRIBMD`: reserved and locked placeholder for future
+  multi-agent collaboration policies.
 
 ### How to Extend Departments
 
@@ -126,64 +163,36 @@ python3 AGENTSMD/scripts/install_ci_workflow.py --repo-root .
 
 ### Starter Prompt Template (First Task)
 
-Use this prompt when an agent starts from zero memory and needs to
-survey the full project before AGENTSMD onboarding:
+Use this prompt when an agent starts from zero memory:
 
 ```text
 You are working in this repository. AGENTSMD is the only rule source.
-Phase A - Full project reconnaissance (read-only):
-1) Read AGENTSMD/AGENTS.md and AGENTSMD/MD_SYNTAX_CHECK.md.
-2) Survey repository structure, runtime stack, key scripts, CI config,
-   dependencies, test setup, API integration points, and deployment docs.
-3) Build a concise project map: business goals, architecture modules,
-   risk hotspots, and likely ownership boundaries.
-4) Map findings into AGENTSMD departments:
-   - RESEARCHMD: market/context/competitor facts
-   - SPECMD: goals/PRD/spec constraints
-   - RESOURCEMD: URLs/paths only
-   - KNOWLEDGEMD: reusable technical explanations
-   - TOOLMD/ENVIRONMENTMD/APIMD: operational facts
-
-Phase B - Natural AGENTSMD onboarding (minimal writes):
-5) Check REGISTRY protected paths before any write.
-6) Create or update only necessary baseline entries (no over-writing,
-   no department flooding).
-7) Record onboarding changes in CHANGEMD.
-8) Run validation:
-   - bash AGENTSMD/scripts/md_sync.sh --scope <DEPT> (if scoped)
-   - bash AGENTSMD/scripts/md_sync.sh (full if cross-department)
+1) Read AGENTSMD/AGENTS.md and follow its mode/workflow rules.
+2) Run a full project investigation:
+   - repository structure and key modules
+   - runtime stack, dependencies, scripts, and CI
+   - APIs, deployment path, test setup, and risk hotspots
+3) Build a concise project understanding report.
+4) Initialize AGENTSMD naturally and only as needed:
+   - create/update department baselines that are actually required
+   - avoid unnecessary mass writes
+   - always check REGISTRY protected paths before writing
+5) Record real onboarding changes in CHANGEMD.
+6) Validate after changes:
+   - bash AGENTSMD/scripts/md_sync.sh --scope <DEPT> (scoped)
+   - bash AGENTSMD/scripts/md_sync.sh (full)
 
 Task:
 <describe task here>
 
 Output format:
 - project reconnaissance summary
-- AGENTSMD onboarding plan (department-by-department)
+- AGENTSMD initialization plan (which departments and why)
 - files read
 - files changed
 - validation output summary
 - final status (success/fail + reason)
 ```
-
-### Department Map (One Line Each)
-
-- `CHANGEMD`: implementation-level change history.
-- `DECISIONMD`: architecture and strategy decisions (ADR).
-- `RESEARCHMD`: market, competitor, and context updates.
-- `SPECMD`: goals, PRD, and technical specification updates.
-- `REGISTRYMD`: protected paths that require external confirmation.
-- `RUNMD`: runtime/operations incidents and recovery actions.
-- `ERRORMD`: engineering failures in build/compile/test/dependency.
-- `SECURITYMD`: confirmed attack incidents and response actions.
-- `KNOWLEDGEMD`: reusable concepts, principles, papers, methods.
-- `RESOURCEMD`: URL/local-path pointers for external resources.
-- `ENVIRONMENTMD`: environment facts (OS/runtime/dependency).
-- `STYLEMD`: suffix-based writing, naming, and comment rules.
-- `TESTMD`: testing standards, tools, scopes, acceptance criteria.
-- `APIMD`: API usage, endpoints, auth/token, and maintenance notes.
-- `TOOLMD`: local tool path, command, and usage boundaries.
-- `GOVERNANCEMD`: locked placeholder for future governance rules.
-- `CONTRIBMD`: locked placeholder for future collaboration rules.
 
 ### Quick Start
 
@@ -291,7 +300,7 @@ flowchart TD
   F --> G[同步后复检<br/>scripts/md_validate.py]
 
   E --> H[受保护规则集<br/>REGISTRY_INDEX.md + REGISTRY_V*.md + placeholder_lock]
-  H --> I[受保护路径写入闸门<br/>保存需确认]
+  H --> I[受保护文件修改确认<br/>保存前必须确认]
 ```
 
 #### 三个核心文件
@@ -312,6 +321,32 @@ flowchart TD
   `STYLEMD`、`TESTMD`、`APIMD`、`TOOLMD`。
 - `placeholder`：占位并锁定，预留后续扩展。
   部门：`GOVERNANCEMD`、`CONTRIBMD`。
+
+#### 部门职责说明（扩展版）
+
+- `CHANGEMD`：记录“已经真实落地”的改动事实、改动原因与改后观察，
+  是执行链路可追溯的主线记录。
+- `DECISIONMD`：记录架构级与策略级决策，明确为何采纳该方案以及
+  为什么放弃其他候选方案。
+- `RESEARCHMD`：记录市场、竞品、行业背景等外部变化，保证规划输入
+  基于最新证据而不是主观假设。
+- `SPECMD`：记录目标、PRD 边界和技术规格基线，为实现、测试、发布
+  提供统一约束。
+- `REGISTRYMD`：记录受保护文件与路径，定义哪些修改必须先经过外部确认。
+- `RUNMD`：记录运行时/运维事件、处置动作与恢复结果，用于提升系统稳定性。
+- `ERRORMD`：记录构建/编译/依赖/测试类工程错误，沉淀根因、修复与防再发机制。
+- `SECURITYMD`：记录已确认攻击事件与安全响应动作，并联动 RUNMD/ERRORMD
+  形成完整证据链。
+- `KNOWLEDGEMD`：记录可复用概念、原理、论文解读与方法论，帮助 Agent
+  快速理解复杂技术背景。
+- `RESOURCEMD`：只记录资源定位信息（URL 或本地绝对路径），不重复存放资源正文。
+- `ENVIRONMENTMD`：记录环境事实（系统、运行时、依赖、兼容基线），用于排障与复现。
+- `STYLEMD`：记录按后缀划分的写作/代码/注释风格规则，保证输出风格一致。
+- `TESTMD`：记录测试标准、覆盖范围、工具链与验收门槛，约束质量闭环。
+- `APIMD`：记录内外 API 的端点、鉴权、配额与维护信息，降低接口接入和变更风险。
+- `TOOLMD`：记录本地工具可执行路径、调用方式与使用边界，确保执行可复现。
+- `GOVERNANCEMD`：预留并锁定的占位目录，后续用于多 Agent 治理规则。
+- `CONTRIBMD`：预留并锁定的占位目录，后续用于多 Agent 协作流程规则。
 
 ### 如何扩展部门
 
@@ -357,62 +392,35 @@ python3 AGENTSMD/scripts/install_ci_workflow.py --repo-root .
 
 ### 初始提示词模板（第一条任务）
 
-当 Agent 没有记忆，并且需要先完整感知项目再接入 AGENTSMD 时，
-先用这段提示词：
+当 Agent 没有记忆时，直接用这段提示词：
 
 ```text
 你在当前仓库工作，AGENTSMD 是唯一规则源。
-阶段 A - 全项目调查感知（只读）：
-1）读取 AGENTSMD/AGENTS.md 与 AGENTSMD/MD_SYNTAX_CHECK.md
-2）调查仓库结构、技术栈、关键脚本、CI、依赖、测试体系、
-   API 接入点与部署信息
-3）输出项目全景：业务目标、架构模块、风险热点、关键边界
-4）把调查结果映射到 AGENTSMD 部门：
-   - RESEARCHMD：市场/背景/竞品事实
-   - SPECMD：目标/PRD/规格约束
-   - RESOURCEMD：仅记录 URL/路径
-   - KNOWLEDGEMD：可复用技术解释
-   - TOOLMD/ENVIRONMENTMD/APIMD：运行与接口事实
-
-阶段 B - AGENTSMD 自然接入（最小写入）：
-5）写入前检查 REGISTRY 受保护路径
-6）仅新增或更新必要基线条目，禁止一次性泛滥写入
-7）把接入动作记录到 CHANGEMD
-8）执行校验：
+1）读取 AGENTSMD/AGENTS.md，并严格按模式和工作流执行。
+2）对整个项目做详细调查：
+   - 仓库结构与核心模块
+   - 技术栈、依赖、脚本、CI
+   - API、部署路径、测试体系、风险热点
+3）输出项目认知摘要。
+4）按需自然初始化 AGENTSMD：
+   - 只初始化必要部门基线，禁止无意义批量写入
+   - 写入前必须检查 REGISTRY 受保护路径
+5）把真实接入变更记录到 CHANGEMD。
+6）执行校验：
    - bash AGENTSMD/scripts/md_sync.sh --scope <DEPT>（单部门）
-   - bash AGENTSMD/scripts/md_sync.sh（跨部门全量）
+   - bash AGENTSMD/scripts/md_sync.sh（全量）
 
 当前任务：
 <在这里描述任务>
 
 输出格式：
 - 项目调查摘要
-- AGENTSMD 接入计划（按部门）
+- AGENTSMD 初始化计划（哪些部门、原因是什么）
 - 已读取文件
 - 已修改文件
 - 校验输出摘要
 - 最终状态（成功/失败 + 原因）
 ```
-
-### 部门一句话说明
-
-- `CHANGEMD`：记录实现层变更历史。
-- `DECISIONMD`：记录架构与策略决策（ADR）。
-- `RESEARCHMD`：记录市场、竞品和背景修正。
-- `SPECMD`：记录目标、PRD 与技术规格演进。
-- `REGISTRYMD`：记录受保护路径，命中后需外部确认。
-- `RUNMD`：记录运行时/运维事件与处置过程。
-- `ERRORMD`：记录构建/编译/依赖/测试类工程错误。
-- `SECURITYMD`：记录确认攻击事件与响应动作。
-- `KNOWLEDGEMD`：记录可复用概念、原理、论文、方法。
-- `RESOURCEMD`：记录外部资源 URL 或本地绝对路径。
-- `ENVIRONMENTMD`：记录环境事实（系统/运行时/依赖）。
-- `STYLEMD`：记录按后缀划分的写作与代码风格规则。
-- `TESTMD`：记录测试标准、范围、工具与验收条件。
-- `APIMD`：记录 API 端点、鉴权、用法与维护信息。
-- `TOOLMD`：记录本地工具路径、命令与使用边界。
-- `GOVERNANCEMD`：占位目录，已锁定，预留治理规则。
-- `CONTRIBMD`：占位目录，已锁定，预留协作规则。
 
 ### 快速开始
 
