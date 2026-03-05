@@ -37,5 +37,5 @@
 ## Observation
 
 * [Path accessibility or traceability results，Multiple outputs possible，One sentence per item]
-* [follow-up research/encoding/impact of decisions，Multiple outputs possible，One sentence per item]
+* [followup research/encoding/impact of decisions，Multiple outputs possible，One sentence per item]
 * [Other observation details that must be recorded，Multiple outputs possible，One sentence per item]

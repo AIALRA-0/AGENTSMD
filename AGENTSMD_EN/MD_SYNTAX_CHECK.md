@@ -88,8 +88,8 @@
       "index": "ERROR_INDEX.md",
       "filename_regex": "^ERROR_[A-Z0-9]+_[A-Z0-9_]+_\\d{4}_\\d{2}_\\d{2}_\\d{4}\\.md$",
       "required_sections": ["Metadata", "Summary", "Thought", "Action", "Observation", "Root Cause", "Fix", "Prevention"],
-      "metadata_required": ["Modifier", "event time（UTC）", "event name（Key）", "Classification", "level", "scope of influence", "Status"],
-      "index_columns": ["event time（UTC）", "level", "event name", "file name", "Classification", "Modifier", "Status", "Summary"]
+      "metadata_required": ["Modifier", "event time（UTC）", "event name（Key）", "Classification", "Level", "scope of influence", "Status"],
+      "index_columns": ["event time（UTC）", "Level", "event name", "file name", "Classification", "Modifier", "Status", "Summary"]
     },
     "KNOWLEDGEMD": {
       "mode": "entry",
@@ -137,8 +137,8 @@
       "index": "RUN_INDEX.md",
       "filename_regex": "^RUN_[A-Z0-9]+_[A-Z0-9_]+_\\d{4}_\\d{2}_\\d{2}_\\d{4}\\.md$",
       "required_sections": ["Metadata", "Summary", "Thought", "Action", "Observation", "Root Cause", "Fix", "Prevention"],
-      "metadata_required": ["Modifier", "event time（UTC）", "event name（Key）", "Classification", "level", "scope of influence", "Status"],
-      "index_columns": ["event time（UTC）", "level", "event name", "file name", "Classification", "Modifier", "Status", "Summary"]
+      "metadata_required": ["Modifier", "event time（UTC）", "event name（Key）", "Classification", "Level", "scope of influence", "Status"],
+      "index_columns": ["event time（UTC）", "Level", "event name", "file name", "Classification", "Modifier", "Status", "Summary"]
     },
     "SECURITYMD": {
       "mode": "log",
@@ -146,8 +146,8 @@
       "index": "SECURITY_INDEX.md",
       "filename_regex": "^SECURITY_[A-Z0-9]+_[A-Z0-9_]+_\\d{4}_\\d{2}_\\d{2}_\\d{4}\\.md$",
       "required_sections": ["Metadata", "Summary", "Thought", "Action", "Observation", "Root Cause", "Fix", "Prevention", "Linkage"],
-      "metadata_required": ["Modifier", "event name（Key）", "Classification", "level", "scope of influence", "Status"],
-      "index_columns": ["level", "event name", "file name", "Classification", "Modifier", "Status", "Summary"]
+      "metadata_required": ["Modifier", "event name（Key）", "Classification", "Level", "scope of influence", "Status"],
+      "index_columns": ["Level", "event name", "file name", "Classification", "Modifier", "Status", "Summary"]
     },
     "SPECMD": {
       "mode": "update",
@@ -195,27 +195,27 @@
     "files": [
       {
         "path": "CONTRIBMD/CONTRIB_INDEX.md",
-        "sha256": "6aedbadea65fb2a8c935829b12526028d1e4e0938299de4d30d07cfd28dd9d82"
+        "sha256": "516758fa79955718a01d90cbb917cb0c39988f92a51dacceed56b3e057fc985d"
       },
       {
         "path": "CONTRIBMD/CONTRIB_TEMPLATE.md",
-        "sha256": "9e3a90ebe038568c6026b8a665ea2d155c0159745cfbabfb156eb729dd618e65"
+        "sha256": "9a10b3e4de0215664d528ecb7b6696fe990d966f9c4aadc966b6ce16e90a85d5"
       },
       {
         "path": "CONTRIBMD/CONTRIB_V1.0.0_2026_03_04_1430.md",
-        "sha256": "61040d0357fdc6e3d9bacb91afb51a36e0f8717c9d693c22480fdb845b24c1cb"
+        "sha256": "55cf6e0329d895dfbbf53871b9bf939694da7c1ec12295c99ae96bd6a14858f8"
       },
       {
         "path": "GOVERNANCEMD/GOVERNANCE_INDEX.md",
-        "sha256": "10b227e8ce2da372585e4b3fdcda327b8b86c329ecab0785ffcbe604463534dc"
+        "sha256": "c8bd5ed57f89345c9e6d70112dc09963cc0d451b21d24b62b6c36b1cbaf8f90d"
       },
       {
         "path": "GOVERNANCEMD/GOVERNANCE_TEMPLATE.md",
-        "sha256": "21a55d6afbeadd4723e5e022ba0e950028e099faf96e45741e9a5b1e76831912"
+        "sha256": "5194ff7e541c721fddf0083e5b29a6f3df5f3accc2dcc77274639accfdf83242"
       },
       {
         "path": "GOVERNANCEMD/GOVERNANCE_V1.0.0_2026_03_04_1430.md",
-        "sha256": "94432fcaf898a1c71d82914e0b6f2337bf0f045bfeb43f32e524c14226bd4daa"
+        "sha256": "8e8f7f3f1607bde184f04228fd0cd95fc1defe8ec3c87fca7d58beb20b13db2c"
       }
     ]
   }

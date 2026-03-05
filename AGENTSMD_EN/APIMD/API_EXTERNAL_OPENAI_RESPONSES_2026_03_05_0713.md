@@ -30,7 +30,7 @@
 
 ## Token Policy
 
-* Authentication method：use Bearer API Key，Key via environment variable `OPENAI_API_KEY` Inject runtime。
+* Authentication method：Use Bearer API Key，Key via environment variable `OPENAI_API_KEY` Inject runtime。
 * token Source：Injected by external key management or deployment platform，Disable writing to the repository、Log、Index and sample text。
 * token rotation：Suggestions 30~90 Rotate once a day，After rotation a health check request must be performed to verify that the new key is available。
 * security boundary：different environments（dev/staging/prod）Use independent key，And isolate uses according to the principle of least privilege。
@@ -38,7 +38,7 @@
 ## Quota & Maintenance
 
 * Dosage caliber：By number of requests、input/output token、error rate、average delay（P95）Do daily statistics。
-* Quotas and current limits：When the threshold is exceeded, non-critical tasks will be demoted first and an alarm will be triggered.，Avoid core processes being blocked by global traffic restrictions。
+* Quotas and current limits：When the threshold is exceeded noncritical tasks will be demoted first and an alarm will be triggered，Avoid core processes being blocked by global traffic restrictions。
 * Maintenance process：Model version adjustment、Parameter policy changes or SDK When upgrading，Must be updated together `TESTMD` with `TOOLMD`。
 
 ## Thought

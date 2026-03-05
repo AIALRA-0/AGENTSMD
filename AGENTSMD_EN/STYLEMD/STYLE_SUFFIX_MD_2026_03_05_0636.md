@@ -15,12 +15,12 @@
 * **Format rules：** Title from `#` sequential progression、Leave a blank line between paragraphs、Each line of a list item expresses a complete semantic、Code blocks must have language identifiers。
 * **Annotation specifications：** Formal documents are not allowed to be left behind HTML Hide annotations，Temporary notes must be deleted or converted into explicit entries before submission。
 * **Naming rules：** Document file names use all uppercase directory prefixes + Semantics Key + Timestamp，Click on the same topic in the directory Key aggregation。
-* **Other rules：** Table column names use Chinese business semantics，Avoid mixing Chinese and English column names, which may lead to index misunderstandings。
+* **Other rules：** Table column names use Chinese business semantics，Avoid mixing Chinese and English column names which may lead to index misunderstandings。
 
 ## Thought
 
-* AGENTSMD The main carrier of the system is Markdown，Inconsistent document styles will directly affect retrieval efficiency and execution accuracy.。
-* Title level and code block language annotation are key basic constraints for automatic inspection and fast reading.。
+* AGENTSMD The main carrier of the system is Markdown，Inconsistent document styles will directly affect retrieval efficiency and execution accuracy。
+* Title level and code block language annotation are key basic constraints for automatic inspection and fast reading。
 * Reducing annotation noise and naming ambiguity can reduce the complexity of subsequent template verification scripts。
 
 ## Action

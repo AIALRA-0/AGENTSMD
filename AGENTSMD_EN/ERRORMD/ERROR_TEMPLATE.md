@@ -3,7 +3,7 @@
 ## Instructions for use
 
 * ERRORMD for log mode（log），One record corresponds to one“System update/compile/Engineering process”event。
-* This template is only used for non-operation and maintenance errors and warnings；runtime/Operation and maintenance issues should be written in RUNMD。
+* This template is only used for nonoperation and maintenance errors and warnings；runtime/Operation and maintenance issues should be written in RUNMD。
 * Added each time ERROR After recording，Must be updated simultaneously `ERROR_INDEX.md`。
 
 ## Metadata
@@ -12,7 +12,7 @@
 * **event time（UTC）：** [YYYY-MM-DD HH:MM]
 * **event name（Key）：** [Stable event name，For example BUILD_COMPILE_FAIL]
 * **Classification：** [BUILD / COMPILE / UPDATE / DEPENDENCY / TEST / LINT / OTHER]
-* **level：** [FATAL / ERROR / WARNING / NOTICE / INFO / DEBUG]
+* **Level：** [FATAL / ERROR / WARNING / NOTICE / INFO / DEBUG]
 * **scope of influence：** [module、Directory、Pipeline or build task name]
 * **Status：** [OPEN / RESOLVED / MITIGATED]
 
@@ -38,7 +38,7 @@
 
 * [Error recurrence results or alarm content，Multiple outputs possible，One sentence per item]
 * [Verify results after repair，Multiple outputs possible，One sentence per item]
-* [Residual risk or follow-up observation point，Multiple outputs possible，One sentence per item]
+* [Residual risk or followup observation point，Multiple outputs possible，One sentence per item]
 * [Other observation details that must be recorded，Multiple outputs possible，One sentence per item]
 
 ## Root Cause

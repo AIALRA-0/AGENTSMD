@@ -1,6 +1,6 @@
 # AGENTSMD Local visual console
 
-This tool is used for local browsing、Edit、Preview `AGENTSMD` under the directory Markdown File，And supports one-click syntax checking、Index updates and full link synchronization。
+This tool is used for local browsing、Edit、Preview `AGENTSMD` under the directory Markdown File，And supports oneclick syntax checking、Index updates and full link synchronization。
 
 ## Function
 
@@ -31,7 +31,7 @@ Double click `..\run_agentsmd_web.bat`，Or execute in terminal：
 
 - AGENTSMD root directory：`<The directory where the startup script is located>`
 - Backup directory：`<AGENTSMDroot directory>/backup`
-- local address：`http://127.0.0.1:34000`（If occupied, the port will be automatically incremented.）
+- local address：`http://127.0.0.1:34000`（If occupied the port will be automatically incremented）
 
 Can be overridden through environment variables：
 
@@ -52,7 +52,7 @@ Can be overridden through environment variables：
 
 ## Troubleshooting
 
-- Startup failed：Check Python Version（>=3.10）
+- Startup failed：Check Python version（>=3.10）
 - Grammar check failed：View page“execution log”output
 - Save blocked：Description hit protected path，Confirm and save
 - Port conflict：The script will automatically switch to an available port

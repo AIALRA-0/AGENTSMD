@@ -43,8 +43,8 @@
 
 ## Quota & Maintenance
 
-* [Dosage caliber（Request volume、token、Concurrency、Bandwidth etc.），Multiple outputs possible，One sentence per item]
-* [Current limiting/Quota thresholds and over-limit policies，Multiple outputs possible，One sentence per item]
+* [Dosage caliber（Request volume、token、Concurrency、Bandwidth etc），Multiple outputs possible，One sentence per item]
+* [Current limiting/Quota thresholds and overlimit policies，Multiple outputs possible，One sentence per item]
 * [Maintenance owner or maintenance process（Upgrade、rollback、Alarm），Multiple outputs possible，One sentence per item]
 
 ## Thought

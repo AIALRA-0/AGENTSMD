@@ -5,7 +5,7 @@
 * **Modifier：** Codex
 * **event name（Key）：** LOGIN_BRUTEFORCE
 * **Classification：** BRUTEFORCE
-* **level：** ERROR
+* **Level：** ERROR
 * **scope of influence：** service-agentmd-api Login interface and authentication gateway
 * **Status：** MITIGATED
 
@@ -24,7 +24,7 @@
 * Positioning /login Endpoint failure rate abnormally spikes to 42.7%，Source IP focus on 3 a /24 Network segment
 * execution source IP aggregate analysis，Top3 The attack source request frequency reaches 420 req/s
 * Issue WAF Rules for instant ban Top10 IP and high frequency /24 Network segment
-* Enable login interface form IP Current limiting（60 req/min）And force the upgrade of the two-step verification code
+* Enable login interface form IP Current limiting（60 req/min）And force the upgrade of the twostep verification code
 * Playback authentication log，Confirm that normal users are not accidentally injured
 
 ## Observation
@@ -39,7 +39,7 @@
 
 ## Fix
 
-* Instant ban high risk IP + activation order IP Current limiting + Forced 2-step verification code challenge
+* Instant ban high risk IP + activation order IP Current limiting + Forced 2step verification code challenge
 
 ## Prevention
 

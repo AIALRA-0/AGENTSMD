@@ -7,12 +7,12 @@
 
 ## Summary
 
-* record current Python The actual parameters of the operating environment（Version/path/pip/Platform），Serves as a baseline for script execution and troubleshooting。
+* record current Python The actual parameters of the operating environment（version/path/pip/Platform），Serves as a baseline for script execution and troubleshooting。
 
 ## Thought
 
 * Documentation and verification scripts directly depend on Python Operating environment，Missing this information increases troubleshooting uncertainty。
-* Confirmation is required before executing automation scripts Python Are the interpreter and callable status normal?。
+* Confirmation is required before executing automation scripts Python Are the interpreter and callable status normal。
 * This entry is used to quickly determine whether the subsequent environment changes are caused by Python Environmental differences cause problems。
 
 ## Action
@@ -27,10 +27,10 @@
 ## Observation
 
 * Collection time（UTC）=2026-03-05 03:36 UTC。
-* Python Version=3.11.2。
+* Python version=3.11.2。
 * Python Executable path=`/usr/bin/python3`。
 * Python Complete build information=`3.11.2 (main, Apr 28 2025, 14:11:48) [GCC 12.2.0]`。
 * Running platform=`Linux-6.8.0-100-generic-x86_64-with-glibc2.36`。
-* pip Version=`23.0.1`，Installation path=`/usr/lib/python3/dist-packages/pip`。
+* pip version=`23.0.1`，Installation path=`/usr/lib/python3/dist-packages/pip`。
 * Python The operating environment is available，Can support current AGENTSMD Script execution。
 * This entry is available as a subsequent dependency exception、Quick baseline for script failure scenarios。

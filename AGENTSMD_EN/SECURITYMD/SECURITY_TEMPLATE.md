@@ -12,7 +12,7 @@
 * **Modifier：** [actuator Agent Name，For example Codex]
 * **event name（Key）：** [Stable event name，For example LOGIN_BRUTEFORCE]
 * **Classification：** [ATTACK / INTRUSION / BRUTEFORCE / ABUSE / INCIDENT / OTHER]
-* **level：** [FATAL / ERROR / WARNING / NOTICE / INFO / DEBUG]
+* **Level：** [FATAL / ERROR / WARNING / NOTICE / INFO / DEBUG]
 * **scope of influence：** [service、interface、node、Tenant or data scope]
 * **Status：** [OPEN / RESOLVED / MITIGATED]
 

@@ -19,7 +19,7 @@
 
 * [The background reason for this specification update，Multiple outputs possible，One sentence per item]
 * [This business goal and user demand constraints，Multiple outputs possible，One sentence per item]
-* [This trade-off between functional design and technical specifications，Multiple outputs possible，One sentence per item]
+* [This tradeoff between functional design and technical specifications，Multiple outputs possible，One sentence per item]
 * [Other spec considerations that must be documented，Multiple outputs possible，One sentence per item]
 
 ## Action

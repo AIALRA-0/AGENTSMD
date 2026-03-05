@@ -20,22 +20,22 @@
 
 ## Usage
 
-* Call precondition：The execution directory should be located at `/aialra/AGENTSMD` or its subdirectories，Avoid cross-project misoperations。
+* Call precondition：The execution directory should be located at `/aialra/AGENTSMD` or its subdirectories，Avoid crossproject misoperations。
 * Minimal call example：`python3 /aialra/AGENTSMD/scripts/md_validate.py --scope TOOLMD` Used to verify tool department entry structure。
-* Format checking example：`npx markdownlint-cli2 \"**/*.md\" --fix`，It is necessary to review the automatic repair results after execution.。
+* Format checking example：`npx markdownlint-cli2 \"**/*.md\" --fix`，It is necessary to review the automatic repair results after execution。
 * Index synchronization example：`python3 /aialra/AGENTSMD/scripts/md_index_sync.py --scope TOOLMD`，Make sure the index is consistent with the entry。
-* Input and output constraints：When the script outputs a failure list, it must be repaired before trying again.，It is forbidden to ignore errors and continue the process.。
+* Input and output constraints：When the script outputs a failure list it must be repaired before trying again，It is forbidden to ignore errors and continue the process。
 
 ## Maintenance
 
 * Maintenance method：Tool paths and versions are regularly inspected by environment maintainers，Entries are updated on demand by the executor。
-* Upgrade strategy：Verify compatibility in an isolated environment before upgrading tools，After passing, update the main environment and refresh TOOL entry。
+* Upgrade strategy：Verify compatibility in an isolated environment before upgrading tools，After passing update the main environment and refresh TOOL entry。
 * Rollback strategy：Roll back to the previous stable version when upgrade fails，And in CHANGEMD Record the reasons and results of rollback。
 * health check：Perform core tool availability check before each task starts（codex/python3/git/grep/npx）。
 
 ## Thought
 
-* Dispersion of tool information leads to repeated trial and error by the executor，Unified registration can significantly reduce path and command inconsistencies.。
+* Dispersion of tool information leads to repeated trial and error by the executor，Unified registration can significantly reduce path and command inconsistencies。
 * record“path+command+Purpose”ternary information，Can quickly determine whether the tool is missing or the calling method is wrong when troubleshooting。
 * Making maintenance strategies explicit reduces the uncertainty introduced by upgrades，Avoid disrupting existing workflows。
 

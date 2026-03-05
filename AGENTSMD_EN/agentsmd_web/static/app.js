@@ -274,7 +274,7 @@ async function saveFile() {
     });
 
     if (!resp.saved && resp.requires_confirmation) {
-      const msg = `The file is protected，Confirm to save?？\n\nhit rule:\n${(resp.matched_rules || []).join("\n")}`;
+      const msg = `The file is protected，Confirm to save？\n\nhit rule:\n${(resp.matched_rules || []).join("\n")}`;
       const ok = window.confirm(msg);
       if (!ok) {
         setStatus("Protected file save canceled", "info");

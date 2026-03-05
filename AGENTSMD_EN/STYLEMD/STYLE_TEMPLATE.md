@@ -21,7 +21,7 @@
 * **Format rules：** [write indent、line width、blank line、quotation marks、Format constraints such as import order，Multiple outputs possible，One sentence per item]
 * **Annotation specifications：** [Write comment location、Annotation content boundaries、Prohibited matters，Multiple outputs possible，One sentence per item]
 * **Naming rules：** [write variable/function/class/Constant naming rules，Multiple outputs possible，One sentence per item]
-* **Other rules：** [Write the suffix-specific rules，Fill in if none `-`，Multiple outputs possible，One sentence per item]
+* **Other rules：** [Write the suffixspecific rules，Fill in if none `-`，Multiple outputs possible，One sentence per item]
 
 ## Thought
 

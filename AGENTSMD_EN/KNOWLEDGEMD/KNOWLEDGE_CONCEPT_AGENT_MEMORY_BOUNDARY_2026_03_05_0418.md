@@ -8,7 +8,7 @@
 
 ## Summary
 
-* definition record、update、log Knowledge boundaries and applicable scenarios of the three modes，Reduce cross-department mixing。
+* definition record、update、log Knowledge boundaries and applicable scenarios of the three modes，Reduce crossdepartment mixing。
 
 ## Source
 
@@ -25,8 +25,8 @@
 ## Thought
 
 * The current documentation system needs to be clarified“Knowledge accumulation”and“event handling”boundary of division of labor，Prevent entry semantic confusion。
-* After three-mode separation，Agent During the reading phase, you can first filter by mode，Press again `Key` precise positioning。
-* This entry serves as a basic concept for subsequent department expansions.，Can be directly reused in templates and workflow instructions。
+* After threemode separation，Agent During the reading phase you can first filter by mode，Press again `Key` precise positioning。
+* This entry serves as a basic concept for subsequent department expansions，Can be directly reused in templates and workflow instructions。
 
 ## Action
 
@@ -36,6 +36,6 @@
 
 ## Observation
 
-* After the entry is created，Pattern boundaries can be quickly reused，Reduce cross-department record conflicts。
-* The index can directly locate the knowledge topic，You only need to update the latest version entry later.。
+* After the entry is created，Pattern boundaries can be quickly reused，Reduce crossdepartment record conflicts。
+* The index can directly locate the knowledge topic，You only need to update the latest version entry later。
 * This concept can directly guide ERRORMD、RUNMD、KNOWLEDGEMD division of responsibilities。

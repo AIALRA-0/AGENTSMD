@@ -1,7 +1,7 @@
 # AGENTSMD
 
-AGENTSMD It's a set“For Agent project documentation operating system”。
-it passes the unified template、Index、Schema constraints and validation scripts，let Agent in**No long-term memory**Under the premise，Can also stably complete project understanding、Record and update。
+AGENTSMD Its a set“For Agent project documentation operating system”。
+it passes the unified template、Index、Schema constraints and validation scripts，let Agent in**No longterm memory**Under the premise，Can also stably complete project understanding、Record and update。
 
 ## core competencies
 
@@ -18,7 +18,7 @@ it passes the unified template、Index、Schema constraints and validation scrip
 ## Catalog overview
 
 - `AGENTS.md`：Global Contracts and Workflows
-- `MD_SYNTAX_CHECK.md`：Machine-readable rule source
+- `MD_SYNTAX_CHECK.md`：Machinereadable rule source
 - `<DEPT>MD/`：Department document directory（Template、Index、entry）
 - `scripts/`：Verify、sync、structure checking script
 - `agentsmd_web/`：Local visual console
@@ -62,7 +62,7 @@ bash scripts/md_sync.sh --scope CHANGEMD
 
 1. Run first `bash scripts/md_sync.sh` Make sure the verification passes。
 2. Confirm `REGISTRYMD` Complete list of protected files。
-3. Check `.github/workflows/ci.yml` Is it consistent with the current script?。
+3. Check `.github/workflows/ci.yml` Is it consistent with the current script。
 4. Create a release again tag。
 
 ## License

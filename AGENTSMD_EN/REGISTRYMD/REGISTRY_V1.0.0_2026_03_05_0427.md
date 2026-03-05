@@ -31,8 +31,8 @@
 
 ## Thought
 
-* The current framework has formed a multi-sector template and index system，Key entry files must be strictly protected。
-* If not clear“protect/non-protected”border，will lead to Agent or overly restricted，Or change key files by mistake。
+* The current framework has formed a multisector template and index system，Key entry files must be strictly protected。
+* If not clear“protect/nonprotected”border，will lead to Agent or overly restricted，Or change key files by mistake。
 * by in REGISTRY Medium solidification approval boundary，Can ensure both stability and execution efficiency。
 
 ## Action
@@ -43,6 +43,6 @@
 
 ## Observation
 
-* Protected path boundaries are now directly executable，The external confirmation process can be explicitly triggered when a path is hit.。
+* Protected path boundaries are now directly executable，The external confirmation process can be explicitly triggered when a path is hit。
 * Unprotected paths can still be iterated normally，Reduce unnecessary approval obstruction。
 * The current strategy satisfies“Key documents under control、Ordinary files can be modified freely”goal。

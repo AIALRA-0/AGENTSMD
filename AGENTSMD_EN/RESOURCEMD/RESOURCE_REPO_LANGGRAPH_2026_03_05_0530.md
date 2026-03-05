@@ -16,7 +16,7 @@
 
 ## Thought
 
-* LangGraph It is the core reference object for the multi-agent orchestration capabilities of the current project.，There must be a stable path entry。
+* LangGraph It is the core reference object for the multiagent orchestration capabilities of the current project，There must be a stable path entry。
 * Separate resource registration and content precipitation，Can reduce duplicate transcription and information drift。
 * This entry begins with `Key=LANGGRAPH` maintenance，Subsequent updates will only refresh the same Key entry。
 

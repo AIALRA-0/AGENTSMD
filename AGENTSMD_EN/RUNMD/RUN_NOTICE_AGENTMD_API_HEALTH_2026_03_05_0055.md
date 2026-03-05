@@ -6,7 +6,7 @@
 * **event time（UTC）：** 2026-03-05 00:55
 * **event name（Key）：** AGENTMD_API_HEALTH
 * **Classification：** HEALTHCHECK
-* **level：** NOTICE
+* **Level：** NOTICE
 * **scope of influence：** service-agentmd-api
 * **Status：** RESOLVED
 
@@ -33,19 +33,19 @@
 
 * period probe continuous 3 failed，Return 504，response time greater than 30s。
 * After restart probe response time reduced to 180ms，continuous 10 times passed，No recurrence seen。
-* There are currently no user-visible errors（API Call log None 5xx），But during peak hours（daily 02:00~04:00）Need to observe stability。
+* There are currently no uservisible errors（API Call log None 5xx），But during peak hours（daily 02:00~04:00）Need to observe stability。
 * A single occurrence was found in the log `connection reset by peer`，but did not reappear，Tentatively determined to be instantaneous network jitter。
 
 ## Root Cause
 
-* The runtime process exits abnormally for a short period of time（OOM or SIGTERM），Causes health check probe link to be interrupted。
+* The runtime process exits abnormally for a short period of time（OOM or SIGTERM），Causes the health check probe link to be interrupted。
 
 ## Fix
 
-* execute deployment rollout restart，force Pod Rebuild and re-establish the connection pool。
+* execute deployment rollout restart，force Pod Rebuild and reestablish the connection pool。
 
 ## Prevention
 
-* will `/healthz` probe with Redis/PostgreSQL Self-inspection is added to the post-release inspection list，Set alarm threshold（continuous 2 failed triggers PagerDuty）。
+* will `/healthz` probe with Redis/PostgreSQL Selfinspection is added to the postrelease inspection list，Set alarm threshold（continuous 2 failed triggers PagerDuty）。
 * Establish a quick handling manual for similar health inspection incidents（5 Restart within minutes + Log extraction + Dependency verification），Deposit RUNBOOKSMD。
 * Add container memory monitoring（Prometheus + threshold 85%），in advance 10 minute alarm，avoid OOM resulting in instant exit。

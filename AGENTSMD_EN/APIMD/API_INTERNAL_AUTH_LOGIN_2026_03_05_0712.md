@@ -31,7 +31,7 @@
 ## Token Policy
 
 * Authentication method：Log in to use `Authorization: Bearer <access_token>` Access protected resources。
-* token Source：Server-side issuance JWT，The client only stores short-term access_token，refresh_token receive HttpOnly/Secure cookie protect。
+* token Source：Serverside issuance JWT，The client only stores shortterm access_token，refresh_token receive HttpOnly/Secure cookie protect。
 * token life cycle：access_token=15 minutes，refresh_token=7 day；Must log in again after timeout。
 * token security boundary：It is forbidden to token write log、Documentation or code repository；Example only allows desensitized placeholders。
 
@@ -39,13 +39,13 @@
 
 * Dosage caliber：By number of login requests（QPS）、Failure rate、429 Proportion、Authentication delay（P95）Monitor。
 * Current limiting strategy：Single IP Login interface upper limit 60 req/min，Continuous failures exceeding the threshold trigger verification codes and temporary bans。
-* Maintenance process：Interface changes require linked updates `SPECMD` with `TESTMD`，After going online, the API Responsible person executes 24h observe。
+* Maintenance process：Interface changes require linked updates `SPECMD` with `TESTMD`，After going online the API Responsible person executes 24h observe。
 
 ## Thought
 
-* The login interface carries both the business entrance and the security boundary.，Functional constraints and risk control constraints must be maintained in the same entry.。
+* The login interface carries both the business entrance and the security boundary，Functional constraints and risk control constraints must be maintained in the same entry。
 * will token Strategies are written as rules rather than explicit text，Balancing enforceability and security compliance。
-* Clarifying current limiting and maintenance responsibilities can reduce unclear responsibilities and response delays in the event of online failures.。
+* Clarifying current limiting and maintenance responsibilities can reduce unclear responsibilities and response delays in the event of online failures。
 
 ## Action
 
@@ -55,6 +55,6 @@
 
 ## Observation
 
-* The current entry can directly guide the access to the login interface.、Troubleshooting、Security review and regression testing。
+* The current entry can directly guide the access to the login interface、Troubleshooting、Security review and regression testing。
 * token The current limiting strategy has been structured and precipitated，Subsequent changes can be made at the same time `Key` Continuous iteration。
-* with `SECURITYMD`、`TESTMD`、`SPECMD` The linkage relationship has been clarified，Can support cross-department fast tracking。
+* with `SECURITYMD`、`TESTMD`、`SPECMD` The linkage relationship has been clarified，Can support crossdepartment fast tracking。

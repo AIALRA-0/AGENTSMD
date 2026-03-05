@@ -2,7 +2,7 @@
 
 thank you for participating AGENTSMD。
 
-## Pre-submission requirements
+## Presubmission requirements
 
 1. follow `AGENTS.md` patterns and workflows。
 2. Modify the template first before any department changes/Index，Change the entry again。

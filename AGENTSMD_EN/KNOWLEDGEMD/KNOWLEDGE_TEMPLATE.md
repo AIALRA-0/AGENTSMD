@@ -43,5 +43,5 @@
 ## Observation
 
 * [The direct result of knowledge accumulation，Multiple outputs possible，One sentence per item]
-* [Impact on subsequent coding or decision-making，Multiple outputs possible，One sentence per item]
+* [Impact on subsequent coding or decisionmaking，Multiple outputs possible，One sentence per item]
 * [Other observation details that must be recorded，Multiple outputs possible，One sentence per item]

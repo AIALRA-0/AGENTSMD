@@ -12,7 +12,7 @@
 ## Thought
 
 * [The background reason for this modification，Multiple outputs possible，One sentence per item]
-* [The decision-making basis for this modification，Multiple outputs possible，One sentence per item]
+* [The decisionmaking basis for this modification，Multiple outputs possible，One sentence per item]
 * [Thoughts on the details of this revision，Multiple outputs possible，One sentence per item]
 * [The target result of this modification，Multiple outputs possible，One sentence per item]
 * [Other thoughts that must be recorded，Multiple outputs possible，One sentence per item]

@@ -24,9 +24,9 @@
 ## Thought
 
 * [Background reasons for this study，Multiple outputs possible，One sentence per item]
-* [The basis for this study’s judgment，Multiple outputs possible，One sentence per item]
+* [The basis for this studys judgment，Multiple outputs possible，One sentence per item]
 * [Constraints and boundaries of this study，Multiple outputs possible，One sentence per item]
-* [Trade-offs at the heart of this study，Multiple outputs possible，One sentence per item]
+* [Tradeoffs at the heart of this study，Multiple outputs possible，One sentence per item]
 * [Other research reflections that must be recorded，Multiple outputs possible，One sentence per item]
 
 ## Action

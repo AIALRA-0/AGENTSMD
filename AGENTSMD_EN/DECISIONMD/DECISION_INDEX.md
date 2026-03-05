@@ -8,4 +8,4 @@
 
 | version number | file name | Modifier | last updated（UTC） | Status | Summary |
 | --- | --- | --- | --- | --- | --- |
-| V1.0.0 | DECISION_V1.0.0_2026_03_04_1758 | Codex | 2026-03-04 17:58 | LATEST | establish AGENTSMD Divisional governance and index priority access as a long-term architectural baseline。 |
+| V1.0.0 | DECISION_V1.0.0_2026_03_04_1758 | Codex | 2026-03-04 17:58 | LATEST | establish AGENTSMD Divisional governance and index priority access as a longterm architectural baseline。 |

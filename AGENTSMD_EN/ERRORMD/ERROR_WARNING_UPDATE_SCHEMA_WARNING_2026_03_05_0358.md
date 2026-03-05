@@ -6,7 +6,7 @@
 * **event time（UTC）：** 2026-03-05 03:58
 * **event name（Key）：** UPDATE_SCHEMA_WARNING
 * **Classification：** UPDATE
-* **level：** WARNING
+* **Level：** WARNING
 * **scope of influence：** AGENTSMD Index synchronization and template field verification
 * **Status：** MITIGATED
 
@@ -16,7 +16,7 @@
 
 ## Thought
 
-* Warning does not block execution，However, the risk of format drift will accumulate in the subsequent evolution.。
+* Warning does not block execution，However the risk of format drift will accumulate in the subsequent evolution。
 * Need to confirm whether the difference is a field naming deviation rather than a real rule conflict。
 * The goal this time is to eliminate warnings first and maintain traceability records，Avoid repeated investigations in the future。
 
@@ -28,9 +28,9 @@
 
 ## Observation
 
-* The alarm is caused by inconsistent field aliases.，No data loss occurs in the actual structure。
+* The alarm is caused by inconsistent field aliases，No data loss occurs in the actual structure。
 * The verification process can pass after synchronization，Warning has been downgraded to a trackable tip。
-* Currently processed as a compatible solution，It is still necessary to unify the field vocabulary when the rules evolve in the future.。
+* Currently processed as a compatible solution，It is still necessary to unify the field vocabulary when the rules evolve in the future。
 
 ## Root Cause
 
@@ -42,4 +42,4 @@
 
 ## Prevention
 
-* New“Changes to template fields require updating the rule source first”Pre-change check items。
+* New“Changes to template fields require updating the rule source first”Prechange check items。

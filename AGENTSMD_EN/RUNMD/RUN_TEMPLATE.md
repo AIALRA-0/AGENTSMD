@@ -12,7 +12,7 @@
 * **event time（UTC）：** [YYYY-MM-DD HH:MM]
 * **event name（Key）：** [Stable event name，For example API_HEALTHCHECK_TIMEOUT]
 * **Classification：** [DEPLOY / HEALTHCHECK / RESTART / ROLLBACK / INCIDENT / OBSERVABILITY / OTHER]
-* **level：** [FATAL / ERROR / WARNING / NOTICE / INFO / DEBUG]
+* **Level：** [FATAL / ERROR / WARNING / NOTICE / INFO / DEBUG]
 * **scope of influence：** [service、node、environment or task scope]
 * **Status：** [OPEN / RESOLVED / MITIGATED]
 
@@ -39,7 +39,7 @@
 
 * [Event recurrence results or monitoring alarm content，Recommended number of inclusions、status code、Quantifiable indicators such as response delay，Multiple outputs possible，One sentence per item]
 * [Verify results after disposal，It is recommended to include the number of consecutive verifications and key indicators，Multiple outputs possible，One sentence per item]
-* [Residual risk or follow-up observation point，It is recommended to include specific observation periods，Multiple outputs possible，One sentence per item]
+* [Residual risk or followup observation point，It is recommended to include specific observation periods，Multiple outputs possible，One sentence per item]
 * [Other observation details that must be recorded，Multiple outputs possible，One sentence per item]
 
 ## Root Cause
