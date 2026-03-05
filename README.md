@@ -16,35 +16,24 @@
 
 ## English
 
-### Agent-Native Documentation Operating System
+### What Is AGENTSMD
 
-Stateless agents can still work reliably through rules, indexes,
-and verifiable workflows.
+AGENTSMD is a documentation operating system for coding agents.
 
-### Table of Contents
+Goal: even a stateless agent can work correctly by reading rules,
+indexes, and templates, then writing back in a predictable format.
 
-- [Why AGENTSMD](#why-agentsmd)
-- [Architecture](#architecture)
-- [Mini AGENTS Contract](#mini-agents-contract)
-- [Capabilities](#capabilities)
-- [Potential](#potential)
-- [Quick Start](#quick-start)
-- [CI and Downstream Usage](#ci-and-downstream-usage)
-- [Screenshots Placeholders](#screenshots-placeholders)
-- [FAQ](#faq)
-
-### Why AGENTSMD
-
-AGENTSMD solves one core problem:
-**how to make coding agents reliable without long-term memory**.
+### Why It Exists
 
 Most agent failures come from drift:
 
-- Context drift (forgets prior constraints)
-- Format drift (inconsistent records)
-- Execution drift (different runs produce different structure)
+- Context drift: constraints are forgotten.
+- Format drift: records become inconsistent.
+- Execution drift: same task, different structure.
 
-### Architecture
+AGENTSMD reduces this drift with strict read/write contracts.
+
+### How It Works
 
 ```mermaid
 flowchart TD
@@ -66,107 +55,64 @@ flowchart TD
   H --> I[Protected Paths Gate]
 ```
 
-#### Core Layers
+#### Three Core Files
 
-- **Contract Layer**: `AGENTS.md` + rules file
-- **Mode Layer**: `update`, `log`, `entry`
-- **Department Layer**: SPEC / RESEARCH / DECISION / CHANGE / RUN / ERROR
-  / SECURITY / ...
-- **Validation Layer**: lint + schema + index consistency
-- **Protection Layer**: protected path registry + placeholder lock hashes
+- `AGENTS.md`: global contract, naming rules, modes, workflows.
+- `*_TEMPLATE.md`: required section structure for each department.
+- `*_INDEX.md`: retrieval entry point; always read this first.
 
-### Mini AGENTS Contract
+#### Three Data Modes
 
-#### Core Document Roles
+- `update`: version stream, keep history, read latest first.
+- `log`: event stream, each incident is independent.
+- `entry`: key-based records, update existing key records.
 
-- **`AGENTS.md`**: defines modes, naming, workflows, boundaries,
-  and protection rules.
-- **`*_TEMPLATE.md`**: defines mandatory sections and writing format
-  for each department.
-- **`*_INDEX.md`**: defines retrieval entries and is always read first
-  before opening records.
+### Department Map (One Line Each)
 
-#### Department One-Line Map
-
-- **`CHANGEMD`**: records implementation-level change history in
-  versioned update stream.
-- **`DECISIONMD`**: records architecture and strategy decisions (ADR)
-  in versioned update stream.
-- **`RESEARCHMD`**: records market, competitor, and context updates in
-  versioned update stream.
-- **`SPECMD`**: records evolving goals, PRD, and technical spec
-  baselines in versioned update stream.
-- **`REGISTRYMD`**: records protected files and paths that require
-  external confirmation.
-- **`RUNMD`**: records runtime and operations incidents as independent
-  timestamped events.
-- **`ERRORMD`**: records non-ops engineering failures
-  (build/compile/dependency/test) as events.
-- **`SECURITYMD`**: records confirmed attack events and response
-  actions with mandatory linkage.
-- **`KNOWLEDGEMD`**: records reusable concepts, principles, papers, and
-  methods by Key-based entries.
-- **`RESOURCEMD`**: records external/local resource pointers
-  (URL or absolute path) by Key-based entries.
-- **`ENVIRONMENTMD`**: records environment facts (OS/runtime/dependency
-  baselines) by Key-based entries.
-- **`STYLEMD`**: records file-suffix style rules for writing, naming,
-  and comments.
-- **`TESTMD`**: records test and evaluation standards, scopes, tools,
-  and acceptance rules.
-- **`APIMD`**: records internal/external API usage, endpoints, tokens,
-  quotas, and maintenance notes.
-- **`TOOLMD`**: records local tools with executable path, usage,
-  and operational boundaries.
-- **`GOVERNANCEMD`**: placeholder module kept locked for future
-  multi-agent governance rules.
-- **`CONTRIBMD`**: placeholder module kept locked for future
-  collaboration process rules.
-
-### Capabilities
-
-- **Index-driven access**: read index first, then target records.
-- **Traceable evolution**: meaningful changes are captured by mode rules.
-- **Deterministic validation**: write flows end in mandatory checks.
-- **Cross-project deployability**: AGENTSMD can be dropped into other repositories.
-- **Bilingual operations**: CN/EN structures stay aligned.
-
-### Potential
-
-AGENTSMD is infrastructure, not just docs.
-
-- For solo builders: company-grade traceability
-- For multi-agent teams: shared contracts, lower entropy
-- For organizations: tacit process -> verifiable operations
+- `CHANGEMD`: implementation-level change history.
+- `DECISIONMD`: architecture and strategy decisions (ADR).
+- `RESEARCHMD`: market, competitor, and context updates.
+- `SPECMD`: goals, PRD, and technical specification updates.
+- `REGISTRYMD`: protected paths that require external confirmation.
+- `RUNMD`: runtime/operations incidents and recovery actions.
+- `ERRORMD`: engineering failures in build/compile/test/dependency.
+- `SECURITYMD`: confirmed attack incidents and response actions.
+- `KNOWLEDGEMD`: reusable concepts, principles, papers, methods.
+- `RESOURCEMD`: URL/local-path pointers for external resources.
+- `ENVIRONMENTMD`: environment facts (OS/runtime/dependency).
+- `STYLEMD`: suffix-based writing, naming, and comment rules.
+- `TESTMD`: testing standards, tools, scopes, acceptance criteria.
+- `APIMD`: API usage, endpoints, auth/token, and maintenance notes.
+- `TOOLMD`: local tool path, command, and usage boundaries.
+- `GOVERNANCEMD`: locked placeholder for future governance rules.
+- `CONTRIBMD`: locked placeholder for future collaboration rules.
 
 ### Quick Start
 
-#### Validate CN
+#### 1) Validate Chinese workspace
 
 ```bash
 cd AGENTSMD_CN
 bash scripts/md_sync.sh
 ```
 
-#### Validate EN
+#### 2) Validate English workspace
 
 ```bash
 cd AGENTSMD_EN
 bash scripts/md_sync.sh
 ```
 
-#### Local Visual Console
+#### 3) Open local visual console
 
 ```bash
 cd AGENTSMD_CN
 bash run_agentsmd_web.sh
 ```
 
-An English mirror is available under `AGENTSMD_EN`.
-
 ### CI and Downstream Usage
 
-The root workflow auto-discovers every `AGENTSMD*` directory and runs:
+Root CI auto-discovers every `AGENTSMD*` directory and runs:
 
 1. `check_markdown.sh`
 2. `md_validate.py`
@@ -187,9 +133,7 @@ python3 AGENTSMD_EN/scripts/install_ci_workflow.py \
   --repo-root /path/to/target-repo
 ```
 
-### Screenshots Placeholders
-
-Current Web Console screenshot:
+### Screenshot
 
 ![Web Console](./AGENTSMD_EN/docs/assets/web-console.png)
 
@@ -197,7 +141,8 @@ Current Web Console screenshot:
 
 **Q: Why keep both CN and EN directories?**
 
-A: To keep operational parity while enabling bilingual contributors.
+A: It keeps bilingual collaboration consistent under the same structure
+and rules.
 
 [Back to language navigation](#language-navigation)
 
@@ -205,33 +150,24 @@ A: To keep operational parity while enabling bilingual contributors.
 
 ## 中文
 
-### 面向 Agent 的文档操作系统
+### AGENTSMD 是什么
 
-无长期记忆的 Agent，也能依靠规则、索引和可验证流程稳定工作。
+AGENTSMD 是一套给编码 Agent 用的文档操作系统。
 
-### 目录
+目标很简单：就算 Agent 没有长期记忆，也能靠规则、索引、模板
+稳定执行，并把结果写回统一格式。
 
-- [项目初衷](#项目初衷)
-- [架构](#架构)
-- [AGENTS 缩小版合同](#agents-缩小版合同)
-- [能力](#能力)
-- [潜力](#潜力)
-- [快速开始](#快速开始)
-- [CI 与下放接入](#ci-与下放接入)
-- [图片占位](#图片占位)
-- [常见问题](#常见问题)
+### 为什么要做它
 
-### 项目初衷
+Agent 常见失败，基本都来自三类漂移：
 
-AGENTSMD 解决一个核心问题：**如何让无长期记忆的编码 Agent 也能稳定执行**。
+- 上下文漂移：约束被忘记。
+- 格式漂移：记录越写越乱。
+- 执行漂移：同一任务每次输出结构都不同。
 
-常见失败来自三类漂移：
+AGENTSMD 的作用，就是把这三类漂移压下来。
 
-- 上下文漂移（忘约束）
-- 格式漂移（记录不一致）
-- 执行漂移（同任务输出结构不一致）
-
-### 架构
+### 它怎么运作
 
 ```mermaid
 flowchart TD
@@ -253,93 +189,71 @@ flowchart TD
   H --> I[受保护路径闸门]
 ```
 
-#### 核心层次
+#### 三个核心文件
 
-- **合同层**：`AGENTS.md` + 规则文件
-- **模式层**：`update`、`log`、`entry`
-- **部门层**：SPEC / RESEARCH / DECISION / CHANGE / RUN / ERROR / SECURITY / ...
-- **校验层**：lint + 结构校验 + 索引一致性
-- **保护层**：受保护路径清单 + 占位目录哈希锁
+- `AGENTS.md`：全局合同，定义模式、命名、工作流和边界。
+- `*_TEMPLATE.md`：定义该部门条目必须有什么章节。
+- `*_INDEX.md`：检索入口，必须先读索引再读正文。
 
-### AGENTS 缩小版合同
+#### 三种数据模式
 
-#### 核心文件职责
+- `update`：版本流，保留历史，默认先读最新。
+- `log`：事件流，每条事件独立，不覆盖历史。
+- `entry`：按 Key 维护条目，已有 Key 直接更新。
 
-- **`AGENTS.md`**：定义模式、命名、工作流、边界与保护规则。
-- **`*_TEMPLATE.md`**：定义该部门条目必填章节与写作格式。
-- **`*_INDEX.md`**：定义检索入口，读条目前必须先读索引。
+### 部门一句话说明
 
-#### 部门一句话说明
-
-- **`CHANGEMD`**：记录实现层面的变更历史，采用版本化更新流。
-- **`DECISIONMD`**：记录架构与策略决策（ADR），采用版本化更新流。
-- **`RESEARCHMD`**：记录市场、竞品与背景修正，采用版本化更新流。
-- **`SPECMD`**：记录项目目标、PRD 与技术规格演进，采用版本化更新流。
-- **`REGISTRYMD`**：记录受保护文件与路径，命中后必须外部确认。
-- **`RUNMD`**：记录运行时与运维事件，每条为独立时间事件。
-- **`ERRORMD`**：记录非运维工程错误（构建/编译/依赖/测试）事件。
-- **`SECURITYMD`**：记录已确认攻击事件与响应动作，并强制联动记录。
-- **`KNOWLEDGEMD`**：按 Key 记录可复用概念、原理、论文与方法论。
-- **`RESOURCEMD`**：按 Key 记录资源定位信息（URL 或本地绝对路径）。
-- **`ENVIRONMENTMD`**：按 Key 记录环境事实（系统/运行时/依赖基线）。
-- **`STYLEMD`**：按文件后缀记录写作、命名与注释风格规则。
-- **`TESTMD`**：按 Key 记录测试与评估标准、范围、工具与验收规则。
-- **`APIMD`**：按 Key 记录内外 API 端点、用法、凭据与维护信息。
-- **`TOOLMD`**：按 Key 记录本地工具路径、调用方式与使用边界。
-- **`GOVERNANCEMD`**：占位模块，当前锁定，预留多 Agent 治理规则。
-- **`CONTRIBMD`**：占位模块，当前锁定，预留多 Agent 协作流程规则。
-
-### 能力
-
-- **索引驱动访问**：先读索引，再读条目。
-- **可追溯演进**：关键修改受模式规则约束并可追踪。
-- **确定性校验**：每次写入都以强制校验闭环结束。
-- **可下放到任意项目**：AGENTSMD 可以直接接入其他仓库。
-- **双语协作**：CN/EN 结构保持同构。
-
-### 潜力
-
-AGENTSMD 是基础设施，不只是文档。
-
-- 对个人：获得公司级可追溯能力
-- 对多 Agent：共享契约、降低执行熵
-- 对组织：把隐性流程转成可验证操作
+- `CHANGEMD`：记录实现层变更历史。
+- `DECISIONMD`：记录架构与策略决策（ADR）。
+- `RESEARCHMD`：记录市场、竞品和背景修正。
+- `SPECMD`：记录目标、PRD 与技术规格演进。
+- `REGISTRYMD`：记录受保护路径，命中后需外部确认。
+- `RUNMD`：记录运行时/运维事件与处置过程。
+- `ERRORMD`：记录构建/编译/依赖/测试类工程错误。
+- `SECURITYMD`：记录确认攻击事件与响应动作。
+- `KNOWLEDGEMD`：记录可复用概念、原理、论文、方法。
+- `RESOURCEMD`：记录外部资源 URL 或本地绝对路径。
+- `ENVIRONMENTMD`：记录环境事实（系统/运行时/依赖）。
+- `STYLEMD`：记录按后缀划分的写作与代码风格规则。
+- `TESTMD`：记录测试标准、范围、工具与验收条件。
+- `APIMD`：记录 API 端点、鉴权、用法与维护信息。
+- `TOOLMD`：记录本地工具路径、命令与使用边界。
+- `GOVERNANCEMD`：占位目录，已锁定，预留治理规则。
+- `CONTRIBMD`：占位目录，已锁定，预留协作规则。
 
 ### 快速开始
 
-#### 校验中文目录
+#### 1）校验中文目录
 
 ```bash
 cd AGENTSMD_CN
 bash scripts/md_sync.sh
 ```
 
-#### 校验英文目录
+#### 2）校验英文目录
 
 ```bash
 cd AGENTSMD_EN
 bash scripts/md_sync.sh
 ```
 
-#### 启动本地可视化控制台
+#### 3）启动本地可视化控制台
 
 ```bash
 cd AGENTSMD_CN
 bash run_agentsmd_web.sh
 ```
 
-英文镜像目录位于 `AGENTSMD_EN`。
-
 ### CI 与下放接入
 
-根目录 workflow 会自动发现所有 `AGENTSMD*` 目录，并执行以下链路：
+根目录 CI 会自动发现所有 `AGENTSMD*` 目录，并执行：
 
 1. `check_markdown.sh`
 2. `md_validate.py`
 3. `md_index_sync.py`
 4. `md_validate.py`
 
-把该 CI 安装到其他仓库：
+把这套 CI 安装到其他仓库：
 
 ```bash
 python3 AGENTSMD_CN/scripts/install_ci_workflow.py \
@@ -353,16 +267,14 @@ python3 AGENTSMD_EN/scripts/install_ci_workflow.py \
   --repo-root /path/to/target-repo
 ```
 
-### 图片占位
-
-当前 Web 控制台截图：
+### 截图
 
 ![Web 控制台](./AGENTSMD_CN/docs/assets/web-console.png)
 
 ### 常见问题
 
-**问：为什么保留 CN 与 EN 两套目录？**
+**问：为什么保留 CN 和 EN 两套目录？**
 
-答：保证双语协作时仍能保持同构与同规则运行。
+答：为了双语协作时仍保持同构、同规则、同校验链路。
 
 [返回语言导航](#language-navigation)
