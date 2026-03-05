@@ -217,7 +217,7 @@ cd AGENTSMD_CN
 bash run_agentsmd_web.sh
 ```
 
-### Workflow Trace (How It Works)
+### Workflow Trace（中文）
 
 Workflow Trace is the execution protocol that turns workflow rules
 into verifiable evidence:
