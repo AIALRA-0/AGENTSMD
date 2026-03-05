@@ -53,13 +53,13 @@ flowchart TD
   U3 --> C
   U4 --> C
 
-  C --> D[check_markdown.sh]
-  D --> E[md_validate.py]
-  E --> F[md_index_sync.py]
-  F --> G[md_validate.py]
+  C --> D[Markdown syntax check]
+  D --> E[Rule consistency validation]
+  E --> F[Index synchronization]
+  F --> G[Post-sync validation]
 
-  E --> H[REGISTRY / placeholder_lock]
-  H --> I[Protected Paths Gate]
+  E --> H[Protected rule set<br/>REGISTRY + placeholder_lock]
+  H --> I[Protected-path write gate]
 ```
 
 #### Three Core Files
@@ -128,10 +128,10 @@ bash run_agentsmd_web.sh
 
 Root CI auto-discovers every `AGENTSMD*` directory and runs:
 
-1. `check_markdown.sh`
-2. `md_validate.py`
-3. `md_index_sync.py`
-4. `md_validate.py`
+1. Markdown syntax check (`check_markdown.sh`)
+2. Rule consistency validation (`md_validate.py`)
+3. Index synchronization (`md_index_sync.py`)
+4. Post-sync validation (`md_validate.py`)
 
 Install this CI into another repository:
 
@@ -201,13 +201,13 @@ flowchart TD
   U3 --> C
   U4 --> C
 
-  C --> D[check_markdown.sh]
-  D --> E[md_validate.py]
-  E --> F[md_index_sync.py]
-  F --> G[md_validate.py]
+  C --> D[Markdown 语法检查]
+  D --> E[规则一致性校验]
+  E --> F[索引同步]
+  F --> G[同步后复检]
 
-  E --> H[REGISTRY / placeholder_lock]
-  H --> I[受保护路径闸门]
+  E --> H[受保护规则集<br/>REGISTRY + placeholder_lock]
+  H --> I[受保护路径写入闸门]
 ```
 
 #### 三个核心文件
@@ -276,10 +276,10 @@ bash run_agentsmd_web.sh
 
 根目录 CI 会自动发现所有 `AGENTSMD*` 目录，并执行：
 
-1. `check_markdown.sh`
-2. `md_validate.py`
-3. `md_index_sync.py`
-4. `md_validate.py`
+1. Markdown 语法检查（`check_markdown.sh`）
+2. 规则一致性校验（`md_validate.py`）
+3. 索引同步（`md_index_sync.py`）
+4. 同步后复检（`md_validate.py`）
 
 把这套 CI 安装到其他仓库：
 
