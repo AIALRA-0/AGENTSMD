@@ -25,6 +25,7 @@ and verifiable workflows.
 
 - [Why AGENTSMD](#why-agentsmd)
 - [Architecture](#architecture)
+- [Mini AGENTS Contract](#mini-agents-contract)
 - [Capabilities](#capabilities)
 - [Potential](#potential)
 - [Quick Start](#quick-start)
@@ -73,6 +74,54 @@ flowchart TD
   / SECURITY / ...
 - **Validation Layer**: lint + schema + index consistency
 - **Protection Layer**: protected path registry + placeholder lock hashes
+
+### Mini AGENTS Contract
+
+#### Core Document Roles
+
+- **`AGENTS.md`**: defines modes, naming, workflows, boundaries,
+  and protection rules.
+- **`*_TEMPLATE.md`**: defines mandatory sections and writing format
+  for each department.
+- **`*_INDEX.md`**: defines retrieval entries and is always read first
+  before opening records.
+
+#### Department One-Line Map
+
+- **`CHANGEMD`**: records implementation-level change history in
+  versioned update stream.
+- **`DECISIONMD`**: records architecture and strategy decisions (ADR)
+  in versioned update stream.
+- **`RESEARCHMD`**: records market, competitor, and context updates in
+  versioned update stream.
+- **`SPECMD`**: records evolving goals, PRD, and technical spec
+  baselines in versioned update stream.
+- **`REGISTRYMD`**: records protected files and paths that require
+  external confirmation.
+- **`RUNMD`**: records runtime and operations incidents as independent
+  timestamped events.
+- **`ERRORMD`**: records non-ops engineering failures
+  (build/compile/dependency/test) as events.
+- **`SECURITYMD`**: records confirmed attack events and response
+  actions with mandatory linkage.
+- **`KNOWLEDGEMD`**: records reusable concepts, principles, papers, and
+  methods by Key-based entries.
+- **`RESOURCEMD`**: records external/local resource pointers
+  (URL or absolute path) by Key-based entries.
+- **`ENVIRONMENTMD`**: records environment facts (OS/runtime/dependency
+  baselines) by Key-based entries.
+- **`STYLEMD`**: records file-suffix style rules for writing, naming,
+  and comments.
+- **`TESTMD`**: records test and evaluation standards, scopes, tools,
+  and acceptance rules.
+- **`APIMD`**: records internal/external API usage, endpoints, tokens,
+  quotas, and maintenance notes.
+- **`TOOLMD`**: records local tools with executable path, usage,
+  and operational boundaries.
+- **`GOVERNANCEMD`**: placeholder module kept locked for future
+  multi-agent governance rules.
+- **`CONTRIBMD`**: placeholder module kept locked for future
+  collaboration process rules.
 
 ### Capabilities
 
@@ -167,6 +216,7 @@ A: To keep operational parity while enabling bilingual contributors.
 
 - [项目初衷](#项目初衷)
 - [架构](#架构)
+- [AGENTS 缩小版合同](#agents-缩小版合同)
 - [能力](#能力)
 - [潜力](#潜力)
 - [快速开始](#快速开始)
@@ -213,6 +263,34 @@ flowchart TD
 - **部门层**：SPEC / RESEARCH / DECISION / CHANGE / RUN / ERROR / SECURITY / ...
 - **校验层**：lint + 结构校验 + 索引一致性
 - **保护层**：受保护路径清单 + 占位目录哈希锁
+
+### AGENTS 缩小版合同
+
+#### 核心文件职责
+
+- **`AGENTS.md`**：定义模式、命名、工作流、边界与保护规则。
+- **`*_TEMPLATE.md`**：定义该部门条目必填章节与写作格式。
+- **`*_INDEX.md`**：定义检索入口，读条目前必须先读索引。
+
+#### 部门一句话说明
+
+- **`CHANGEMD`**：记录实现层面的变更历史，采用版本化更新流。
+- **`DECISIONMD`**：记录架构与策略决策（ADR），采用版本化更新流。
+- **`RESEARCHMD`**：记录市场、竞品与背景修正，采用版本化更新流。
+- **`SPECMD`**：记录项目目标、PRD 与技术规格演进，采用版本化更新流。
+- **`REGISTRYMD`**：记录受保护文件与路径，命中后必须外部确认。
+- **`RUNMD`**：记录运行时与运维事件，每条为独立时间事件。
+- **`ERRORMD`**：记录非运维工程错误（构建/编译/依赖/测试）事件。
+- **`SECURITYMD`**：记录已确认攻击事件与响应动作，并强制联动记录。
+- **`KNOWLEDGEMD`**：按 Key 记录可复用概念、原理、论文与方法论。
+- **`RESOURCEMD`**：按 Key 记录资源定位信息（URL 或本地绝对路径）。
+- **`ENVIRONMENTMD`**：按 Key 记录环境事实（系统/运行时/依赖基线）。
+- **`STYLEMD`**：按文件后缀记录写作、命名与注释风格规则。
+- **`TESTMD`**：按 Key 记录测试与评估标准、范围、工具与验收规则。
+- **`APIMD`**：按 Key 记录内外 API 端点、用法、凭据与维护信息。
+- **`TOOLMD`**：按 Key 记录本地工具路径、调用方式与使用边界。
+- **`GOVERNANCEMD`**：占位模块，当前锁定，预留多 Agent 治理规则。
+- **`CONTRIBMD`**：占位模块，当前锁定，预留多 Agent 协作流程规则。
 
 ### 能力
 
