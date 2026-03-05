@@ -6,6 +6,8 @@
 * 本体系目标：可检索、可追溯、可校验、可回放。
 * `MD_SYNTAX_CHECK.md` 是结构与字段的唯一机器规则源。
 * 受保护文件以 `REGISTRYMD` 最新条目为准。
+* 每次任务必须显式选择一个 `workflow_id` 并说明选择理由。
+* 每次任务必须新增一条 `RUN_INFO_WORKFLOW_*` 轨迹记录，且 `Workflow Trace` 不能缺漏步骤。
 
 ## 模式总则
 
@@ -67,6 +69,7 @@
 * 语法检查：`scripts/check_markdown.sh`
 * 规则校验：`scripts/md_validate.py [--scope <DEPT>]`
 * 索引同步：`scripts/md_index_sync.py [--scope <DEPT>]`
+* 工作流守卫：`scripts/md_workflow_guard.py [--scope <DEPT>] [--strict|--report-only]`
 * 一键闭环：`scripts/md_sync.sh [--scope <DEPT>]`
 * 规则配置：`MD_SYNTAX_CHECK.md`（新增部门或规则变更只改此文件）
 
@@ -79,6 +82,9 @@
 * 任意工作流若涉及代码、配置、依赖、接口行为变更，必须包含 `TESTMD` 验证。
 * 任意工作流若涉及运行态影响，必须包含 `RUNMD` 观察与结果回写。
 * 任意工作流结束后必须执行“工作流：校验与同步”。
+* 工作流步骤以 `MD_SYNTAX_CHECK.md.workflow_enforcement.catalog` 为机读准则；文档清单用于理解，不作为脚本唯一判断源。
+* 只读部门必须在 `Workflow Trace` 中标记 `READ_ONLY` 并附 evidence；必改部门必须标记 `CHANGED` 且存在真实改动。
+* 未完成 workflow trace 的任务不得视为完成，不得跳过 `md_workflow_guard.py`。
 
 ### 工作流：项目初始化（新项目第一次接入）
 

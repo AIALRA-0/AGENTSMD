@@ -42,6 +42,34 @@
 * [残留风险或后续观察点，建议包含具体观察时段，可以多条输出，每条一句话]
 * [其他必须记录的观察细节，可以多条输出，每条一句话]
 
+## Workflow Trace
+
+* [当本次记录用于工作流执行留痕时，必须提供以下 JSON 结构；普通运行事件可填写 `N/A`]
+
+```json
+{
+  "workflow_id": "CODING_IMPLEMENTATION",
+  "task_id": "T20260305-001",
+  "reason": "本次任务属于编码实施流程，需按既定链路执行。",
+  "steps": [
+    {
+      "step_id": "S01",
+      "department": "SPECMD",
+      "status": "READ_ONLY",
+      "evidence": ["SPEC_INDEX.md"],
+      "note": ""
+    },
+    {
+      "step_id": "S08",
+      "department": "CHANGEMD",
+      "status": "CHANGED",
+      "evidence": ["CHANGE_V1.0.1_2026_03_05_1200.md"],
+      "note": ""
+    }
+  ]
+}
+```
+
 ## Root Cause
 
 * [本次事件根因，可以多条输出，每条一句话]

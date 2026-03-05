@@ -25,10 +25,12 @@ if [[ -n "$SCOPE" ]]; then
   python3 ./scripts/md_validate.py --scope "$SCOPE"
   python3 ./scripts/md_index_sync.py --scope "$SCOPE"
   python3 ./scripts/md_validate.py --scope "$SCOPE"
+  python3 ./scripts/md_workflow_guard.py --scope "$SCOPE" --strict
 else
   python3 ./scripts/md_validate.py
   python3 ./scripts/md_index_sync.py
   python3 ./scripts/md_validate.py
+  python3 ./scripts/md_workflow_guard.py --strict
 fi
 
 echo "md_sync: passed"

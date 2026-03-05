@@ -6,6 +6,8 @@
 * Goals of this system：Searchable、traceable、Verifiable、replayable。
 * `MD_SYNTAX_CHECK.md` Is the only source of machine rules for structures and fields。
 * Protected files start with `REGISTRYMD` The latest entry shall prevail。
+* Every task must explicitly select one `workflow_id` and state the reason。
+* Every task must add one `RUN_INFO_WORKFLOW_*` trace record，and `Workflow Trace` cannot miss steps。
 
 ## Pattern General Principles
 
@@ -67,6 +69,7 @@
 * Grammar check：`scripts/check_markdown.sh`
 * Rule verification：`scripts/md_validate.py [--scope <DEPT>]`
 * Index synchronization：`scripts/md_index_sync.py [--scope <DEPT>]`
+* Workflow guard：`scripts/md_workflow_guard.py [--scope <DEPT>] [--strict|--report-only]`
 * Oneclick closed loop：`scripts/md_sync.sh [--scope <DEPT>]`
 * Rule configuration：`MD_SYNTAX_CHECK.md`（If you add a new department or change rules only this file will be modified）
 
@@ -79,6 +82,9 @@
 * Any workflow that involves code、Configuration、Depend on、Interface behavior changes，must contain `TESTMD` Verify。
 * If any workflow involves running state impact，must contain `RUNMD` Observation and result writing back。
 * Must be executed after any workflow ends“Workflow：Verification and synchronization”。
+* Workflow steps are machine-enforced by `MD_SYNTAX_CHECK.md.workflow_enforcement.catalog`。
+* Read-only departments must be marked `READ_ONLY` with evidence in `Workflow Trace`; must-write departments must be `CHANGED` with real file diffs。
+* Tasks without completed workflow trace cannot be treated as done，and must not skip `md_workflow_guard.py`。
 
 ### Workflow：Project initialization（New project access for the first time）
 

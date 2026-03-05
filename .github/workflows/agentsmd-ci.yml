@@ -30,6 +30,7 @@ jobs:
               Path('scripts/check_markdown.sh'),
               Path('scripts/md_validate.py'),
               Path('scripts/md_index_sync.py'),
+              Path('scripts/md_workflow_guard.py'),
               Path('MD_SYNTAX_CHECK.md'),
           ]
 
@@ -95,6 +96,20 @@ jobs:
       - name: Validate after sync
         working-directory: ${{ matrix.path }}
         run: python3 scripts/md_validate.py
+
+      - name: Workflow guard report (non-blocking)
+        working-directory: ${{ matrix.path }}
+        run: python3 scripts/md_workflow_guard.py --report-only --format github --base-ref "${{ github.event.pull_request.base.sha || github.sha }}" --head-ref "${{ github.event.pull_request.head.sha || github.sha }}"
+
+      - name: Upload workflow guard report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workflow-guard-${{ replace(matrix.path, '/', '_') }}
+          path: |
+            ${{ matrix.path }}/workflow_guard_report.md
+            ${{ matrix.path }}/workflow_guard_report.json
+          if-no-files-found: ignore
 
       - name: Ensure no unsynced changes
         run: git diff --exit-code

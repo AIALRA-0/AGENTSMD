@@ -42,6 +42,34 @@
 * [Residual risk or followup observation point，It is recommended to include specific observation periods，Multiple outputs possible，One sentence per item]
 * [Other observation details that must be recorded，Multiple outputs possible，One sentence per item]
 
+## Workflow Trace
+
+* [If this record is used as workflow execution evidence, provide JSON below; for normal runtime-only events, fill `N/A`]
+
+```json
+{
+  "workflow_id": "CODING_IMPLEMENTATION",
+  "task_id": "T20260305-001",
+  "reason": "This task belongs to coding implementation flow.",
+  "steps": [
+    {
+      "step_id": "S01",
+      "department": "SPECMD",
+      "status": "READ_ONLY",
+      "evidence": ["SPEC_INDEX.md"],
+      "note": ""
+    },
+    {
+      "step_id": "S08",
+      "department": "CHANGEMD",
+      "status": "CHANGED",
+      "evidence": ["CHANGE_V1.0.1_2026_03_05_1200.md"],
+      "note": ""
+    }
+  ]
+}
+```
+
 ## Root Cause
 
 * [The root cause of this incident，Multiple outputs possible，One sentence per item]
