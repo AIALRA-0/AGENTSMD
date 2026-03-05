@@ -12,9 +12,9 @@
 
 ## Tool Details
 
-* TOOL-001 | Codex CLI | LOCAL | /usr/local/bin/codex | codex | 终端主执行器，用于代码修改、命令执行与流程协作
+* TOOL-001 | Codex CLI | LOCAL | PATH:codex | codex | 终端主执行器，用于代码修改、命令执行与流程协作
 * TOOL-002 | Python 3 | LOCAL | /usr/bin/python3 | python3 [script.py] | 运行校验脚本、数据处理脚本与自动化工具
-* TOOL-003 | Markdown Lint CLI2 | OPEN_SOURCE | /usr/bin/npx | npx markdownlint-cli2 \"**/*.md\" --fix | Markdown 语法检查与自动修复
+* TOOL-003 | Markdown Lint CLI2 | OPEN_SOURCE | PATH:npx | npx markdownlint-cli2 \"**/*.md\" --fix | Markdown 语法检查与自动修复
 * TOOL-004 | Git | LOCAL | /usr/bin/git | git [command] | 版本管理与历史追踪
 * TOOL-005 | Grep | OPEN_SOURCE | /usr/bin/grep | grep \"pattern\" [path] | 快速检索文件与内容定位
 

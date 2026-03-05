@@ -12,9 +12,9 @@
 
 ## Tool Details
 
-* TOOL-001 | Codex CLI | LOCAL | /usr/local/bin/codex | codex | terminal main actuator，for code modification、Command execution and process collaboration
+* TOOL-001 | Codex CLI | LOCAL | PATH:codex | codex | terminal main actuator，for code modification、Command execution and process collaboration
 * TOOL-002 | Python 3 | LOCAL | /usr/bin/python3 | python3 [script.py] | Run verification script、Data processing scripts and automation tools
-* TOOL-003 | Markdown Lint CLI2 | OPEN_SOURCE | /usr/bin/npx | npx markdownlint-cli2 \"**/*.md\" --fix | Markdown Grammar checking and automatic repair
+* TOOL-003 | Markdown Lint CLI2 | OPEN_SOURCE | PATH:npx | npx markdownlint-cli2 \"**/*.md\" --fix | Markdown Grammar checking and automatic repair
 * TOOL-004 | Git | LOCAL | /usr/bin/git | git [command] | Version management and history tracking
 * TOOL-005 | Grep | OPEN_SOURCE | /usr/bin/grep | grep \"pattern\" [path] | Quickly retrieve files and locate content
 
