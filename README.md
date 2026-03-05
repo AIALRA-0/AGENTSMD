@@ -37,10 +37,10 @@ AGENTSMD reduces this drift with strict read/write contracts.
 
 ```mermaid
 flowchart TD
-  A[AGENTS.md Contract] --> B[Department Modes]
+  A[AGENTS.md Global Constraints] --> B[Functional Split]
   B --> B1[update<br/>Version stream]
   B --> B2[log<br/>Event stream]
-  B --> B3[entry<br/>Key-based stream]
+  B --> B3[entry<br/>Entry stream]
 
   B1 --> C[Index-first Read/Write]
   B2 --> C
@@ -57,7 +57,7 @@ flowchart TD
 
 #### Three Core Files
 
-- `AGENTS.md`: global contract, naming rules, modes, workflows.
+- `AGENTS.md`: global constraints, naming rules, modes, workflows.
 - `*_TEMPLATE.md`: required section structure for each department.
 - `*_INDEX.md`: retrieval entry point; always read this first.
 
@@ -65,7 +65,16 @@ flowchart TD
 
 - `update`: version stream, keep history, read latest first.
 - `log`: event stream, each incident is independent.
-- `entry`: key-based records, update existing key records.
+- `entry`: entry stream, update existing entries by Key.
+
+#### Mode-to-Department Mapping
+
+- `update` -> `CHANGEMD`, `DECISIONMD`, `RESEARCHMD`,
+  `SPECMD`, `REGISTRYMD`
+- `log` -> `RUNMD`, `ERRORMD`, `SECURITYMD`
+- `entry` -> `KNOWLEDGEMD`, `RESOURCEMD`, `ENVIRONMENTMD`,
+  `STYLEMD`, `TESTMD`, `APIMD`, `TOOLMD`
+- placeholders (locked) -> `GOVERNANCEMD`, `CONTRIBMD`
 
 ### Department Map (One Line Each)
 
@@ -119,6 +128,23 @@ Root CI auto-discovers every `AGENTSMD*` directory and runs:
 3. `md_index_sync.py`
 4. `md_validate.py`
 
+### Script Roles (py/sh)
+
+- `scripts/check_markdown.sh`: runs Markdown lint and basic
+  formatting checks.
+- `scripts/md_validate.py`: validates mode rules, template sections,
+  index consistency, and protected-path constraints.
+- `scripts/md_index_sync.py`: rebuilds or synchronizes index files
+  according to mode rules.
+- `scripts/md_sync.sh`: one-command pipeline that chains lint,
+  validate, index sync, and re-validate.
+- `scripts/validate_structure.sh`: validates required directory and
+  file structure.
+- `scripts/install_ci_workflow.py`: installs AGENTSMD CI workflow into
+  another repository.
+- `run_agentsmd_web.sh`: launches the local visual console for browsing
+  and editing Markdown content.
+
 Install this CI into another repository:
 
 ```bash
@@ -171,10 +197,10 @@ AGENTSMD 的作用，就是把这三类漂移压下来。
 
 ```mermaid
 flowchart TD
-  A[AGENTS.md 合同] --> B[部门模式]
+  A[AGENTS.md 全局约束] --> B[职能拆分]
   B --> B1[update<br/>版本流]
   B --> B2[log<br/>事件流]
-  B --> B3[entry<br/>按 Key 条目流]
+  B --> B3[entry<br/>条目流]
 
   B1 --> C[先索引后读写]
   B2 --> C
@@ -191,15 +217,24 @@ flowchart TD
 
 #### 三个核心文件
 
-- `AGENTS.md`：全局合同，定义模式、命名、工作流和边界。
+- `AGENTS.md`：全局约束，定义模式、命名、工作流和边界。
 - `*_TEMPLATE.md`：定义该部门条目必须有什么章节。
 - `*_INDEX.md`：检索入口，必须先读索引再读正文。
 
-#### 三种数据模式
+#### 三种数据流
 
 - `update`：版本流，保留历史，默认先读最新。
 - `log`：事件流，每条事件独立，不覆盖历史。
-- `entry`：按 Key 维护条目，已有 Key 直接更新。
+- `entry`：条目流，已有 Key 直接更新已有条目。
+
+#### 数据流与部门映射
+
+- `update` -> `CHANGEMD`、`DECISIONMD`、`RESEARCHMD`、
+  `SPECMD`、`REGISTRYMD`
+- `log` -> `RUNMD`、`ERRORMD`、`SECURITYMD`
+- `entry` -> `KNOWLEDGEMD`、`RESOURCEMD`、`ENVIRONMENTMD`、
+  `STYLEMD`、`TESTMD`、`APIMD`、`TOOLMD`
+- 占位并锁定 -> `GOVERNANCEMD`、`CONTRIBMD`
 
 ### 部门一句话说明
 
@@ -252,6 +287,19 @@ bash run_agentsmd_web.sh
 2. `md_validate.py`
 3. `md_index_sync.py`
 4. `md_validate.py`
+
+### 脚本作用（py/sh）
+
+- `scripts/check_markdown.sh`：执行 Markdown 语法与基础格式检查。
+- `scripts/md_validate.py`：校验模式规则、模板章节、索引一致性、
+  受保护路径约束。
+- `scripts/md_index_sync.py`：按模式规则重建或同步索引文件。
+- `scripts/md_sync.sh`：一键串联 lint、校验、索引同步、再次校验。
+- `scripts/validate_structure.sh`：校验必需目录与必需文件结构。
+- `scripts/install_ci_workflow.py`：把 AGENTSMD 的 CI workflow
+  安装到目标仓库。
+- `run_agentsmd_web.sh`：启动本地可视化控制台，用于浏览与编辑
+  Markdown 文件。
 
 把这套 CI 安装到其他仓库：
 
