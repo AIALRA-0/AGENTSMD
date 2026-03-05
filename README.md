@@ -106,6 +106,50 @@ When you add a new department, follow this sequence:
 Rule of thumb: scripts should stay generic; extend by rules, not by
 hardcoding names in Python.
 
+### How to Initialize in a Project
+
+Use this minimal onboarding sequence:
+
+1. Copy one workspace (`AGENTSMD_EN` or `AGENTSMD_CN`) into the target
+   repository root and rename it to `AGENTSMD`.
+2. Run one full sync to generate baseline index content.
+3. Install AGENTSMD CI workflow in the target repository.
+
+Example:
+
+```bash
+# run in target repository root
+cp -r /path/to/AGENTSMD/AGENTSMD_EN ./AGENTSMD
+bash AGENTSMD/scripts/md_sync.sh
+python3 AGENTSMD/scripts/install_ci_workflow.py --repo-root .
+```
+
+### Starter Prompt Template (First Task)
+
+Use this prompt when an agent starts from zero memory:
+
+```text
+You are working in this repository. AGENTSMD is the only rule source.
+Before any action:
+1) Read AGENTSMD/AGENTS.md.
+2) Identify task mode (update/log/entry).
+3) Read target *_INDEX.md first, then target entry file.
+4) Check REGISTRY protected paths before writing.
+5) After changes run:
+   bash AGENTSMD/scripts/md_sync.sh --scope <DEPT>
+6) If scope is unclear run:
+   bash AGENTSMD/scripts/md_sync.sh
+
+Task:
+<describe task here>
+
+Output format:
+- files read
+- files changed
+- validation output summary
+- final status (success/fail + reason)
+```
+
 ### Department Map (One Line Each)
 
 - `CHANGEMD`: implementation-level change history.
@@ -277,6 +321,50 @@ flowchart TD
    - `bash scripts/md_sync.sh`（全量回归）
 
 原则：脚本保持通用化，扩展优先改规则，不在 Python 里硬编码部门名。
+
+### 如何初始化到项目中
+
+建议按最小接入流程：
+
+1. 把一个工作区（`AGENTSMD_EN` 或 `AGENTSMD_CN`）复制到目标
+   仓库根目录，并重命名为 `AGENTSMD`。
+2. 先执行一次全量同步，生成初始索引基线。
+3. 安装 AGENTSMD 的 CI workflow。
+
+示例：
+
+```bash
+# 在目标仓库根目录执行
+cp -r /path/to/AGENTSMD/AGENTSMD_CN ./AGENTSMD
+bash AGENTSMD/scripts/md_sync.sh
+python3 AGENTSMD/scripts/install_ci_workflow.py --repo-root .
+```
+
+### 初始提示词模板（第一条任务）
+
+当 Agent 没有记忆时，可以先用这段提示词：
+
+```text
+你在当前仓库工作，AGENTSMD 是唯一规则源。
+执行任何操作前必须：
+1）读取 AGENTSMD/AGENTS.md
+2）识别任务模式（update/log/entry）
+3）先读目标 *_INDEX.md，再读目标条目
+4）写入前检查 REGISTRY 受保护路径
+5）修改后执行：
+   bash AGENTSMD/scripts/md_sync.sh --scope <DEPT>
+6）若范围不明确，执行：
+   bash AGENTSMD/scripts/md_sync.sh
+
+当前任务：
+<在这里描述任务>
+
+输出格式：
+- 已读取文件
+- 已修改文件
+- 校验输出摘要
+- 最终状态（成功/失败 + 原因）
+```
 
 ### 部门一句话说明
 
