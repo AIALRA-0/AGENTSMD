@@ -81,6 +81,31 @@ flowchart TD
 - `placeholder`: locked modules for future extension.
   Departments: `GOVERNANCEMD`, `CONTRIBMD`.
 
+### How to Extend Departments
+
+When you add a new department, follow this sequence:
+
+1. Pick a mode: `update`, `log`, `entry`, or `placeholder`.
+2. Create the folder in both `AGENTSMD_CN` and `AGENTSMD_EN`.
+3. Add `*_TEMPLATE.md` and `*_INDEX.md`, then add one sample entry.
+4. Update the machine rules in `MD_SYNTAX_CHECK.md`:
+   - add to `active_departments` or `placeholder_departments`
+   - add `departments.<DEPT>` config
+   - define `mode`, `template`, `index`, `filename_regex`
+   - define `required_sections`, `metadata_required`, `index_columns`
+5. Update `AGENTS.md`:
+   - add the department into mode definitions
+   - add one-line role description
+   - add workflow links if the department is in active flow
+6. If it is a placeholder department, update `placeholder_lock.files`
+   hashes in `MD_SYNTAX_CHECK.md`.
+7. Run validation:
+   - `bash scripts/md_sync.sh --scope <DEPT>`
+   - `bash scripts/md_sync.sh` (full regression)
+
+Rule of thumb: scripts should stay generic; extend by rules, not by
+hardcoding names in Python.
+
 ### Department Map (One Line Each)
 
 - `CHANGEMD`: implementation-level change history.
@@ -228,6 +253,30 @@ flowchart TD
   `STYLEMD`、`TESTMD`、`APIMD`、`TOOLMD`。
 - `placeholder`：占位并锁定，预留后续扩展。
   部门：`GOVERNANCEMD`、`CONTRIBMD`。
+
+### 如何扩展部门
+
+新增部门时，按这个顺序执行：
+
+1. 先确定模式：`update`、`log`、`entry` 或 `placeholder`。
+2. 在 `AGENTSMD_CN` 和 `AGENTSMD_EN` 同步创建目录。
+3. 新增 `*_TEMPLATE.md`、`*_INDEX.md`，再放一条样例条目。
+4. 更新 `MD_SYNTAX_CHECK.md` 的机器规则块：
+   - 写入 `active_departments` 或 `placeholder_departments`
+   - 新增 `departments.<DEPT>` 配置
+   - 定义 `mode`、`template`、`index`、`filename_regex`
+   - 定义 `required_sections`、`metadata_required`、`index_columns`
+5. 更新 `AGENTS.md`：
+   - 在模式定义中加入该部门
+   - 增加部门一句话职责
+   - 如果进入主流程，补充对应工作流路径
+6. 若是占位部门，更新 `MD_SYNTAX_CHECK.md` 里的
+   `placeholder_lock.files` 哈希。
+7. 执行校验：
+   - `bash scripts/md_sync.sh --scope <DEPT>`
+   - `bash scripts/md_sync.sh`（全量回归）
+
+原则：脚本保持通用化，扩展优先改规则，不在 Python 里硬编码部门名。
 
 ### 部门一句话说明
 
