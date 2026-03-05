@@ -1,4 +1,5 @@
 const treeRoot = document.getElementById("tree-root");
+const recentRoot = document.getElementById("recent-root");
 const editor = document.getElementById("editor");
 const preview = document.getElementById("preview");
 const statusEl = document.getElementById("status");
@@ -6,14 +7,18 @@ const outputEl = document.getElementById("output");
 const currentFileEl = document.getElementById("current-file");
 const lastCommandEl = document.getElementById("last-command");
 const themeBtn = document.getElementById("btn-theme");
+const sortSelect = document.getElementById("file-sort");
 
 const EXPANDED_KEY = "agentsmd.tree.expanded.v1";
 const THEME_KEY = "agentsmd.theme.v1";
+const SORT_KEY = "agentsmd.file.sort.v1";
+const SORT_VALUES = new Set(["name_asc", "name_desc", "mtime_desc", "mtime_asc"]);
 
 let currentFile = "";
 let latestTree = null;
 let expandedMap = loadExpandedMap();
 let currentTheme = "light";
+let currentSort = loadSortPreference();
 
 function loadExpandedMap() {
   try {
@@ -49,6 +54,24 @@ function loadTheme() {
     return detectSystemTheme();
   }
   return detectSystemTheme();
+}
+
+function loadSortPreference() {
+  try {
+    const saved = localStorage.getItem(SORT_KEY);
+    if (saved && SORT_VALUES.has(saved)) return saved;
+  } catch {
+    return "name_asc";
+  }
+  return "name_asc";
+}
+
+function saveSortPreference(mode) {
+  try {
+    localStorage.setItem(SORT_KEY, mode);
+  } catch {
+    // ignore storage write failure
+  }
 }
 
 function updateThemeButton() {
@@ -120,6 +143,52 @@ function collectDirPaths(node, out = []) {
   return out;
 }
 
+function sortByName(a, b) {
+  return (a.name || "").localeCompare(b.name || "", "en-US", { sensitivity: "base" });
+}
+
+function sortFiles(files) {
+  const list = [...files];
+  if (currentSort === "name_desc") {
+    list.sort((a, b) => sortByName(b, a));
+    return list;
+  }
+  if (currentSort === "mtime_desc") {
+    list.sort((a, b) => {
+      const ta = Number(a.modified_ts || 0);
+      const tb = Number(b.modified_ts || 0);
+      if (tb !== ta) return tb - ta;
+      return sortByName(a, b);
+    });
+    return list;
+  }
+  if (currentSort === "mtime_asc") {
+    list.sort((a, b) => {
+      const ta = Number(a.modified_ts || 0);
+      const tb = Number(b.modified_ts || 0);
+      if (ta !== tb) return ta - tb;
+      return sortByName(a, b);
+    });
+    return list;
+  }
+  list.sort(sortByName);
+  return list;
+}
+
+function flattenFiles(node, out = []) {
+  if (!node) return out;
+  if (node.type === "file") out.push(node);
+  for (const child of node.children || []) {
+    flattenFiles(child, out);
+  }
+  return out;
+}
+
+function formatModifiedAt(node) {
+  const text = node?.modified_at || "";
+  return text ? text.replace(" UTC", "") : "-";
+}
+
 function ensureAncestorsExpanded(path) {
   if (!path) return;
   const parts = path.split("/");
@@ -170,7 +239,10 @@ function renderNode(node, container, depth = 0) {
     row.appendChild(name);
     li.appendChild(row);
 
-    for (const child of node.children || []) {
+    const allChildren = node.children || [];
+    const dirChildren = [...allChildren.filter((c) => c.type === "dir")].sort(sortByName);
+    const fileChildren = sortFiles(allChildren.filter((c) => c.type === "file"));
+    for (const child of [...dirChildren, ...fileChildren]) {
       renderNode(child, childrenList, depth + 1);
     }
     li.appendChild(childrenList);
@@ -200,9 +272,52 @@ function renderNode(node, container, depth = 0) {
 
 function markActiveFile() {
   document.querySelectorAll(".tree-file.active").forEach((el) => el.classList.remove("active"));
+  document.querySelectorAll(".recent-item.active").forEach((el) => el.classList.remove("active"));
   if (!currentFile) return;
   const current = document.querySelector(`.tree-file[data-path="${CSS.escape(currentFile)}"]`);
   if (current) current.classList.add("active");
+  const recent = document.querySelector(`.recent-item[data-path="${CSS.escape(currentFile)}"]`);
+  if (recent) recent.classList.add("active");
+}
+
+function renderRecentFiles(tree) {
+  if (!recentRoot) return;
+  recentRoot.innerHTML = "";
+  const files = flattenFiles(tree, []);
+  files.sort((a, b) => {
+    const ta = Number(a.modified_ts || 0);
+    const tb = Number(b.modified_ts || 0);
+    if (tb !== ta) return tb - ta;
+    return sortByName(a, b);
+  });
+
+  const top = files.slice(0, 12);
+  if (top.length === 0) {
+    const empty = document.createElement("li");
+    empty.className = "recent-item";
+    empty.textContent = "No files yet";
+    recentRoot.appendChild(empty);
+    return;
+  }
+
+  for (const file of top) {
+    const li = document.createElement("li");
+    li.className = "recent-item";
+    li.dataset.path = file.path;
+
+    const name = document.createElement("span");
+    name.className = "recent-name";
+    name.textContent = file.path;
+
+    const time = document.createElement("span");
+    time.className = "recent-time";
+    time.textContent = formatModifiedAt(file);
+
+    li.appendChild(name);
+    li.appendChild(time);
+    li.onclick = () => openFile(file.path);
+    recentRoot.appendChild(li);
+  }
 }
 
 function renderTree(tree) {
@@ -213,6 +328,7 @@ function renderTree(tree) {
     renderNode(child, list, 0);
   }
   treeRoot.appendChild(list);
+  renderRecentFiles(tree);
   markActiveFile();
 }
 
@@ -221,6 +337,7 @@ async function loadTree() {
   try {
     const tree = await fetchJson("/api/tree");
     latestTree = tree;
+    if (sortSelect) sortSelect.value = currentSort;
     renderTree(tree);
     setStatus("File tree updated", "ok");
   } catch (err) {
@@ -338,6 +455,15 @@ function collapseAll() {
   if (latestTree) renderTree(latestTree);
 }
 
+function onSortChange() {
+  if (!sortSelect) return;
+  const mode = sortSelect.value;
+  if (!SORT_VALUES.has(mode)) return;
+  currentSort = mode;
+  saveSortPreference(mode);
+  if (latestTree) renderTree(latestTree);
+}
+
 document.getElementById("btn-refresh-tree").onclick = loadTree;
 document.getElementById("btn-render").onclick = renderPreview;
 document.getElementById("btn-save").onclick = saveFile;
@@ -348,6 +474,7 @@ document.getElementById("btn-backup").onclick = manualBackup;
 document.getElementById("btn-tree-expand-all").onclick = expandAll;
 document.getElementById("btn-tree-collapse-all").onclick = collapseAll;
 if (themeBtn) themeBtn.onclick = toggleTheme;
+if (sortSelect) sortSelect.onchange = onSortChange;
 
 applyTheme(loadTheme());
 loadTree();

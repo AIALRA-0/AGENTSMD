@@ -140,12 +140,79 @@ button.primary:hover {
 .tree-tools {
   display: inline-flex;
   gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .tree-tools button {
   padding: 4px 8px;
   border-radius: 8px;
   font-size: 12px;
+}
+
+#file-sort {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.recent-box {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--panel) 94%, #c8ddff 6%);
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.recent-head {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.recent-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 140px;
+  overflow: auto;
+}
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-radius: 8px;
+  padding: 4px 6px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.recent-item:hover {
+  background: color-mix(in srgb, var(--panel) 78%, #7db0ff 22%);
+}
+
+.recent-item.active {
+  background: color-mix(in srgb, var(--panel) 70%, #6ea0ff 30%);
+}
+
+.recent-name {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recent-time {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 #current-file,
@@ -155,7 +222,7 @@ button.primary:hover {
 }
 
 .tree-root {
-  max-height: 62vh;
+  max-height: calc(62vh - 170px);
   overflow: auto;
   padding-right: 4px;
   border: 1px solid var(--line);

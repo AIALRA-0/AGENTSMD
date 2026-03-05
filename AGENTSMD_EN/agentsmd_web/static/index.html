@@ -32,7 +32,17 @@
           <div class="tree-tools">
             <button id="btn-tree-expand-all" type="button">Expand</button>
             <button id="btn-tree-collapse-all" type="button">fold</button>
+            <select id="file-sort" title="File sort">
+              <option value="name_asc">Name A-Z</option>
+              <option value="name_desc">Name Z-A</option>
+              <option value="mtime_desc">Modified New→Old</option>
+              <option value="mtime_asc">Modified Old→New</option>
+            </select>
           </div>
+        </div>
+        <div class="recent-box">
+          <div class="recent-head">Recently Modified</div>
+          <ul id="recent-root" class="recent-list"></ul>
         </div>
         <div id="tree-root" class="tree-root"></div>
       </aside>

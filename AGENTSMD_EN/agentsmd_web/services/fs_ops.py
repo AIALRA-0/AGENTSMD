@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from pathlib import Path
 
 
@@ -39,6 +40,12 @@ class FsGuard:
     def relative(self, path: Path) -> str:
         return path.resolve().relative_to(self.root).as_posix()
 
+    @staticmethod
+    def _mtime_info(path: Path) -> tuple[float, str]:
+        ts = path.stat().st_mtime
+        iso = datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+        return ts, iso
+
     def list_tree(self) -> dict:
         def walk(dir_path: Path) -> dict:
             dirs = sorted(
@@ -59,11 +66,14 @@ class FsGuard:
                 if child["children"]:
                     children.append(child)
             for f in files:
+                modified_ts, modified_at = self._mtime_info(f)
                 children.append(
                     {
                         "name": f.name,
                         "path": self.relative(f),
                         "type": "file",
+                        "modified_ts": modified_ts,
+                        "modified_at": modified_at,
                         "children": [],
                     }
                 )
@@ -71,6 +81,8 @@ class FsGuard:
                 "name": dir_path.name,
                 "path": "." if dir_path == self.root else self.relative(dir_path),
                 "type": "dir",
+                "modified_ts": None,
+                "modified_at": None,
                 "children": children,
             }
 

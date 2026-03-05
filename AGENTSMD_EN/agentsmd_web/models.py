@@ -9,6 +9,8 @@ class TreeNode(BaseModel):
     name: str
     path: str
     type: Literal["dir", "file"]
+    modified_ts: float | None = None
+    modified_at: str | None = None
     children: list["TreeNode"] = Field(default_factory=list)
 
 
