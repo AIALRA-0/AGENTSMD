@@ -449,6 +449,48 @@ python3 AGENTSMD/scripts/install_ci_workflow.py --repo-root .
 * 最终执行结果状态
 ```
 
+### 日常任务提示词模板
+
+```text
+## AGENTSMD 是你唯一的行为规则源与执行协议
+你可以假设自己是无状态 Agent，所有操作必须闭环
+每轮必须按照 读索引 → 按模板写 → Workflow Trace → md_sync 校验
+
+## 执行说明
+1. 任务开始前，必须先读取以下文件
+* AGENTS.md 说明全局模式、工作流、部门职责
+* REGISTRYMD/REGISTRY_INDEX.md 说明保护路径
+
+2. 任务进行使用 Workflow Trace
+* 从 MD_SYNTAX_CHECK.md 的 workflow_enforcement.catalog 选一个最匹配的 workflow_id
+* 在 RUNMD 创建/更新一条记录：RUN_INFO_WORKFLOW_*.md
+* 在该文件中完整填写 ## Workflow Trace JSON ，不得缺漏
+* status 规则严格遵守读写权限架构
+
+3. 任务结束前，必须执行切且只执行一次校验，除非有报错可以执行多次
+   bash AGENTSMD/scripts/md_sync.sh
+
+4. 你的记录语言必须通俗易懂，不得晦涩，不得过于精简，以足够的细节和解释详细报告你的每一个要点
+
+## 本次用户任务
+* 用户任务1
+* 用户任务2
+* 用户任务3
+
+
+## 报告输出
+报告输出严格采用以下结构
+1. Workflow Trace 选择
+2. Workflow Trace 执行情况
+3. 任务执行摘要
+* 完成的事情列表
+* 关键决策列表
+4. 文件操作记录列表
+5. 工作流瓶颈反馈与优化建议
+6. md_sync.sh 校验结果
+7. 最终执行状态结果
+```
+
 ### 快速开始
 
 #### 1）校验中文目录
