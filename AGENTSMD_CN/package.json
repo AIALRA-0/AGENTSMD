@@ -1,0 +1,11 @@
+{
+  "name": "agentsmd-cn",
+  "private": true,
+  "description": "AGENTSMD CN workspace tooling",
+  "devDependencies": {
+    "markdownlint-cli2": "0.18.1"
+  },
+  "scripts": {
+    "lint:md": "markdownlint-cli2 \"**/*.md\" --ignore \"node_modules/**\" --ignore \".venv*/**\""
+  }
+}

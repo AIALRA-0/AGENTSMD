@@ -82,6 +82,17 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install local Node devDependencies
+        working-directory: ${{ matrix.path }}
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --no-audit --no-fund
+          elif [ -f package.json ]; then
+            npm install --no-audit --no-fund
+          else
+            echo "No package.json found, skip npm install."
+          fi
+
       - name: Markdown lint (auto-fix safe)
         working-directory: ${{ matrix.path }}
         run: bash scripts/check_markdown.sh
@@ -109,6 +120,14 @@ jobs:
       - name: Workflow guard report (non-blocking)
         working-directory: ${{ matrix.path }}
         run: python3 scripts/md_workflow_guard.py --report-only --format github --base-ref "${{ github.event.pull_request.base.sha || github.sha }}" --head-ref "${{ github.event.pull_request.head.sha || github.sha }}"
+
+      - name: Optional configValidationFlow integration
+        if: always()
+        working-directory: ${{ matrix.path }}
+        env:
+          AGENTSMD_RUN_CONFIG_VALIDATION_FLOW: ${{ vars.AGENTSMD_RUN_CONFIG_VALIDATION_FLOW }}
+          AGENTSMD_FAIL_ON_SKIP: ${{ vars.AGENTSMD_FAIL_ON_SKIP }}
+        run: bash scripts/run_optional_integration.sh
 
       - name: Upload workflow guard report
         if: always()
