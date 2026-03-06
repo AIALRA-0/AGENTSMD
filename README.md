@@ -197,6 +197,48 @@ This Round Output:
 * final execution status
 ```
 
+### Daily Task Prompt Template
+
+```text
+## AGENTSMD is your only behavior rule source and execution protocol
+You can assume you are a stateless Agent, all operations must be closed-loop
+In each round, you must follow: read index → write by template → Workflow Trace → md_sync validation
+
+## Execution Notes
+1. Before starting the task, you must read:
+* AGENTS.md for global modes, workflows, and department responsibilities
+* REGISTRYMD/REGISTRY_INDEX.md for protected paths
+
+2. Use Workflow Trace during execution
+* Select the best-matching workflow_id from MD_SYNTAX_CHECK.md workflow_enforcement.catalog
+* Create/update one RUNMD record: RUN_INFO_WORKFLOW_*.md
+* Fully fill in ## Workflow Trace JSON in that file, no missing fields
+* Strictly follow status rules based on the read/write permission architecture
+
+3. Before finishing the task, run validation once and only once unless errors require reruns
+* bash AGENTSMD/scripts/md_sync.sh
+
+4. Your record language must be plain and easy to understand, not obscure, not overly brief, with enough details and explanations to clearly report every key point
+
+## User Tasks in This Round
+* user task 1
+* user task 2
+* user task 3
+
+
+## Report Output
+Use exactly this structure
+1. Workflow Trace selection
+2. Workflow Trace execution status
+3. Task execution summary
+* completed items list
+* key decisions list
+4. File operation record list
+5. Workflow bottlenecks and optimization suggestions
+6. md_sync.sh validation result
+7. Final execution status
+```
+
 ### Quick Start
 
 #### 1) Validate Chinese workspace
