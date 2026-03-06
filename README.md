@@ -165,30 +165,30 @@ python3 AGENTSMD/scripts/install_ci_workflow.py --repo-root .
 Use this prompt when an agent starts from zero memory:
 
 ```text
-You are working in <repository path>. We are onboarding AGENTSMD as
-the only rule source to maintain the project.
-Tasks:
-1) Read AGENTSMD/AGENTS.md and strictly follow mode/workflow rules.
-2) Run a full project investigation:
-   - repository structure and core modules
-   - tech stack, dependencies, scripts, CI
-   - APIs, deployment path, test system, risk hotspots
-   - any other necessary information
-3) Output a project cognition summary.
-4) Initialize AGENTSMD naturally and only as needed:
-   - only initialize required departments (for project understanding)
-   - check REGISTRY protected paths before every write
-5) Record real onboarding changes in CHANGEMD.
-6) Run first full validation (normally once at task end):
-   - bash AGENTSMD/scripts/md_sync.sh
+You are working in <repository path>. We are onboarding AGENTSMD to maintain the project as the only rule source.
+Below are your tasks
+1. Read AGENTSMD/AGENTS.md, understand rules and workflows, and strictly follow mode/workflow execution afterwards
+2. Run a detailed full-project investigation
+* repository structure and core modules
+* tech stack, dependencies, scripts, CI
+* API, deployment path, testing system, risk hotspots
+* any other necessary information
+3. Output a project cognition summary.
+4. Initialize AGENTSMD departments naturally as needed
+* only initialize required departments, mainly to supplement project cognition
+* check REGISTRY protected paths before every write
+5. Record real onboarding changes into CHANGEMD.
+6. Run first full validation; normally run once at task end
+* bash AGENTSMD/scripts/md_sync.sh
 
-User Task:
-* Deploy latest CN/EN from https://github.com/AIALRA-0/AGENTSMD.git
-  into our project directory
+
+User Tasks:
+* Deploy the latest CN/EN versions from https://github.com/AIALRA-0/AGENTSMD.git into our project directory
 * <describe user task here>
 * .....
 
-This Round Output:
+
+This Round Output
 * project investigation summary
 * AGENTSMD initialization actions
 * files read
