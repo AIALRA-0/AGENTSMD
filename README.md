@@ -137,8 +137,7 @@ When you add a new department, follow this sequence:
 6. If it is a placeholder department, update `placeholder_lock.files`
    hashes in `MD_SYNTAX_CHECK.md`.
 7. Run validation:
-   - `bash scripts/md_sync.sh --scope <DEPT>`
-   - `bash scripts/md_sync.sh` (full regression)
+   - `bash scripts/md_sync.sh` (full regression, run once at task end)
 
 Rule of thumb: scripts should stay generic; extend by rules, not by
 hardcoding names in Python.
@@ -179,8 +178,7 @@ You are working in this repository. AGENTSMD is the only rule source.
    - always check REGISTRY protected paths before writing
 5) Record real onboarding changes in CHANGEMD.
 6) Validate after changes:
-   - bash AGENTSMD/scripts/md_sync.sh --scope <DEPT> (scoped)
-   - bash AGENTSMD/scripts/md_sync.sh (full)
+   - bash AGENTSMD/scripts/md_sync.sh (full, run once at task end)
 
 Task:
 <describe task here>
@@ -387,8 +385,7 @@ flowchart TD
 6. 若是占位部门，更新 `MD_SYNTAX_CHECK.md` 里的
    `placeholder_lock.files` 哈希。
 7. 执行校验：
-   - `bash scripts/md_sync.sh --scope <DEPT>`
-   - `bash scripts/md_sync.sh`（全量回归）
+   - `bash scripts/md_sync.sh`（全量回归，任务收尾只执行一次）
 
 原则：脚本保持通用化，扩展优先改规则，不在 Python 里硬编码部门名。
 
@@ -427,8 +424,7 @@ python3 AGENTSMD/scripts/install_ci_workflow.py --repo-root .
    - 写入前必须检查 REGISTRY 受保护路径
 5）把真实接入变更记录到 CHANGEMD。
 6）执行校验：
-   - bash AGENTSMD/scripts/md_sync.sh --scope <DEPT>（单部门）
-   - bash AGENTSMD/scripts/md_sync.sh（全量）
+   - bash AGENTSMD/scripts/md_sync.sh（全量，任务收尾只执行一次）
 
 当前任务：
 <在这里描述任务>
