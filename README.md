@@ -201,24 +201,25 @@ This Round Output
 
 ```text
 ## AGENTSMD is your only behavior rule source and execution protocol
-You can assume you are a stateless Agent, all operations must be closed-loop
-In each round, you must follow: read index → write by template → Workflow Trace → md_sync validation
+You can assume you are a stateless Agent, and all operations must be closed-loop
+Each round must follow: read index → write by template → Workflow Trace → md_sync validation
 
 ## Execution Notes
-1. Before starting the task, you must read:
-* AGENTS.md for global modes, workflows, and department responsibilities
-* REGISTRYMD/REGISTRY_INDEX.md for protected paths
+1. Before the task starts, you must read the following files
+* AGENTS.md explains global modes, workflows, and department responsibilities
+* REGISTRYMD/REGISTRY_INDEX.md explains protected paths
 
-2. Use Workflow Trace during execution
+2. Use Workflow Trace during the task
+* Before each workflow round starts, run Workflow cleanup precheck first. Check whether historical `RUN_INFO_WORKFLOW_*` trace files exist in the current change set, ensure this round has only one workflow trace candidate; if multiple are found, clean first and then continue
 * Select the best-matching workflow_id from MD_SYNTAX_CHECK.md workflow_enforcement.catalog
-* Create/update one RUNMD record: RUN_INFO_WORKFLOW_*.md
-* Fully fill in ## Workflow Trace JSON in that file, no missing fields
+* Create/update one record in RUNMD: RUN_INFO_WORKFLOW_*.md
+* Fully fill in ## Workflow Trace JSON in that file, without omissions
 * Strictly follow status rules based on the read/write permission architecture
 
-3. Before finishing the task, run validation once and only once unless errors require reruns
+3. Before task completion, you must run validation once and only once, unless errors require reruns
 * bash AGENTSMD/scripts/md_sync.sh
 
-4. Your record language must be plain and easy to understand, not obscure, not overly brief, with enough details and explanations to clearly report every key point
+4. Your writing must be plain and easy to understand, not obscure, not overly brief, and with enough detail and explanation to clearly report every key point
 
 ## User Tasks in This Round
 * user task 1
@@ -504,6 +505,7 @@ python3 AGENTSMD/scripts/install_ci_workflow.py --repo-root .
 * REGISTRYMD/REGISTRY_INDEX.md 说明保护路径
 
 2. 任务进行使用 Workflow Trace
+* 每轮工作流开始前，必须先执行 Workflow 清理预检，检查当前变更集中是否存在历史遗留 `RUN_INFO_WORKFLOW_*` 轨迹文件，保证“本轮任务”仅有一个 workflow trace 候选；若发现多个，先清理再继续
 * 从 MD_SYNTAX_CHECK.md 的 workflow_enforcement.catalog 选一个最匹配的 workflow_id
 * 在 RUNMD 创建/更新一条记录：RUN_INFO_WORKFLOW_*.md
 * 在该文件中完整填写 ## Workflow Trace JSON ，不得缺漏

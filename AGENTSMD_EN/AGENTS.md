@@ -58,11 +58,14 @@
 ## Execution process
 
 1. read `AGENTS.md`。
-2. Read target workflow，and select read target department by mode
-3. Execute information acquisition according to workflow，Execution and postexecution observations，and update entries as needed
-4. If you need to update write，read before write `REGISTRYMD` Latest entry check protection path，If hit protected path，Stop writing and request external confirmation。
-5. Multiple department edits can be completed within one task; run one full `scripts/md_sync.sh` only after all edits are finished。
-6. If automatic repair fails，Output failure list and alert external users。
+2. Before each workflow round starts, run Workflow cleanup precheck:
+   * Check whether historical `RUN_INFO_WORKFLOW_*` trace files are still present in current change set.
+   * Ensure this round has only one workflow trace candidate; if multiple exist, clean first (commit/archive/rename) and then continue.
+3. Read target workflow，and select read target department by mode
+4. Execute information acquisition according to workflow，Execution and postexecution observations，and update entries as needed
+5. If you need to update write，read before write `REGISTRYMD` Latest entry check protection path，If hit protected path，Stop writing and request external confirmation。
+6. Multiple department edits can be completed within one task; run one full `scripts/md_sync.sh` only after all edits are finished。
+7. If automatic repair fails，Output failure list and alert external users。
 
 ## Automated entrance
 
@@ -77,6 +80,8 @@
 
 ### Workflow completion rules（force）
 
+* After selecting workflow_id and before formal writes, each round must pass Workflow cleanup precheck; if precheck fails, execution must stop.
+* One round allows only one `RUN_INFO_WORKFLOW_*` as the main trace; multiple workflow traces in one change set are forbidden.
 * Any workflow that involves writing，Must be executed before writing `REGISTRYMD` protection check（Must be executed even if not explicitly listed）。
 * If any workflow produces actual modifications，must contain `CHANGEMD` record。
 * Any workflow that involves code、Configuration、Depend on、Interface behavior changes，must contain `TESTMD` Verify。
