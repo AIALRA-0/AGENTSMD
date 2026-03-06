@@ -165,31 +165,36 @@ python3 AGENTSMD/scripts/install_ci_workflow.py --repo-root .
 Use this prompt when an agent starts from zero memory:
 
 ```text
-You are working in this repository. AGENTSMD is the only rule source.
-1) Read AGENTSMD/AGENTS.md and follow its mode/workflow rules.
+You are working in <repository path>. We are onboarding AGENTSMD as
+the only rule source to maintain the project.
+Tasks:
+1) Read AGENTSMD/AGENTS.md and strictly follow mode/workflow rules.
 2) Run a full project investigation:
-   - repository structure and key modules
-   - runtime stack, dependencies, scripts, and CI
-   - APIs, deployment path, test setup, and risk hotspots
-3) Build a concise project understanding report.
+   - repository structure and core modules
+   - tech stack, dependencies, scripts, CI
+   - APIs, deployment path, test system, risk hotspots
+   - any other necessary information
+3) Output a project cognition summary.
 4) Initialize AGENTSMD naturally and only as needed:
-   - create/update department baselines that are actually required
-   - avoid unnecessary mass writes
-   - always check REGISTRY protected paths before writing
+   - only initialize required departments (for project understanding)
+   - check REGISTRY protected paths before every write
 5) Record real onboarding changes in CHANGEMD.
-6) Validate after changes:
-   - bash AGENTSMD/scripts/md_sync.sh (full, run once at task end)
+6) Run first full validation (normally once at task end):
+   - bash AGENTSMD/scripts/md_sync.sh
 
-Task:
-<describe task here>
+User Task:
+* Deploy latest CN/EN from https://github.com/AIALRA-0/AGENTSMD.git
+  into our project directory
+* <describe user task here>
+* .....
 
-Output format:
-- project reconnaissance summary
-- AGENTSMD initialization plan (which departments and why)
-- files read
-- files changed
-- validation output summary
-- final status (success/fail + reason)
+This Round Output:
+* project investigation summary
+* AGENTSMD initialization actions
+* files read
+* files changed
+* validation summary
+* final execution status
 ```
 
 ### Quick Start
@@ -412,30 +417,34 @@ python3 AGENTSMD/scripts/install_ci_workflow.py --repo-root .
 当 Agent 没有记忆时，直接用这段提示词：
 
 ```text
-你在当前仓库工作，AGENTSMD 是唯一规则源。
-1）读取 AGENTSMD/AGENTS.md，并严格按模式和工作流执行。
+你在<仓库路径>工作，我们将要接入 AGENTSMD 以维护项目并作为唯一规则源。
+下面是你的任务：
+1）读取 AGENTSMD/AGENTS.md，对规则和工作流有所认知，并在之后的工作中严格按模式和工作流执行。
 2）对整个项目做详细调查：
    - 仓库结构与核心模块
    - 技术栈、依赖、脚本、CI
    - API、部署路径、测试体系、风险热点
+   - 其他任何必要信息
 3）输出项目认知摘要。
-4）按需自然初始化 AGENTSMD：
-   - 只初始化必要部门基线，禁止无意义批量写入
-   - 写入前必须检查 REGISTRY 受保护路径
+4）按需自然初始化 AGENTSMD 部门：
+   - 只初始化必要部门，主要目的在于补充项目认知
+   - 每次写入前必须检查 REGISTRY 受保护路径
 5）把真实接入变更记录到 CHANGEMD。
-6）执行校验：
-   - bash AGENTSMD/scripts/md_sync.sh（全量，任务收尾只执行一次）
+6）执行首次全量校验，一般任务收尾执行一次即可：
+   - bash AGENTSMD/scripts/md_sync.sh
 
-当前任务：
-<在这里描述任务>
+用户任务：
+* 将最新版的 https://github.com/AIALRA-0/AGENTSMD.git 的 CN/EN 版本部署到我们的项目目录
+* <在这里描述用户任务>
+* .....
 
-输出格式：
-- 项目调查摘要
-- AGENTSMD 初始化计划（哪些部门、原因是什么）
-- 已读取文件
-- 已修改文件
-- 校验输出摘要
-- 最终状态（成功/失败 + 原因）
+本轮输出：
+* 项目调查摘要
+* AGENTSMD 初始化动作
+* 已读取文件
+* 已修改文件
+* 校验输出摘要
+* 最终执行结果状态
 ```
 
 ### 快速开始
