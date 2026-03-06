@@ -3,7 +3,7 @@
   "private": true,
   "description": "AGENTSMD EN workspace tooling",
   "devDependencies": {
-    "markdownlint-cli2": "0.18.1"
+    "markdownlint-cli2": "^0.17.2"
   },
   "scripts": {
     "lint:md": "markdownlint-cli2 \"**/*.md\" --ignore \"node_modules/**\" --ignore \".venv*/**\""

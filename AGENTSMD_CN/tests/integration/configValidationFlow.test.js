@@ -17,6 +17,9 @@ function createScenarioServer(scenario) {
 
     if (step.type === "timeout") {
       await delay(step.delayMs ?? 200);
+      if (!res.writableEnded) {
+        res.destroy();
+      }
       return;
     }
 

@@ -34,19 +34,19 @@ detect_python() {
 }
 
 detect_markdownlint() {
-  local local_bin="$BASE_DIR/node_modules/.bin/markdownlint-cli2"
-  if [[ -x "$local_bin" ]]; then
-    MD_LINT=("$local_bin")
-    return
-  fi
-
-  if command -v markdownlint-cli2 >/dev/null 2>&1; then
-    MD_LINT=("markdownlint-cli2")
+  local local_main="$BASE_DIR/node_modules/markdownlint-cli2/markdownlint-cli2.mjs"
+  if [[ -f "$local_main" ]] && command -v node >/dev/null 2>&1; then
+    MD_LINT=("node" "$local_main")
     return
   fi
 
   if command -v npx >/dev/null 2>&1 && npx --no-install markdownlint-cli2 --version >/dev/null 2>&1; then
     MD_LINT=("npx" "--no-install" "markdownlint-cli2")
+    return
+  fi
+
+  if command -v markdownlint-cli2 >/dev/null 2>&1; then
+    MD_LINT=("markdownlint-cli2")
     return
   fi
 
